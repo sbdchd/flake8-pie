@@ -1,0 +1,77 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.6.1
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "pyproject.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            echo 'export PATH="$PATH":"$HOME"/.local/bin' >> $BASH_ENV
+            # Use our new PATH so we can call poetry from bash
+            source $BASH_ENV
+            # Install with `--user` because we don't own root
+            python3 -m pip install --user poetry===0.11.5
+            # Install our dev dependencies
+            poetry install
+      - save_cache:
+          paths:
+          paths:
+            - ./.mypy_cache
+            - /home/circleci/.cache/pypoetry/
+          key: v1-dependencies-{{ checksum "pyproject.lock" }}
+
+      - run:
+          name: run tests
+          command: |
+            poetry run pytest
+
+
+
+  lint:
+    docker:
+      - image: circleci/python:3.6.1
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "pyproject.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            echo 'export PATH="$PATH":"$HOME"/.local/bin' >> $BASH_ENV
+            # Use our new PATH so we can call poetry from bash
+            source $BASH_ENV
+            # Install with `--user` because we don't own root
+            python3 -m pip install --user poetry===0.11.5
+            # Install our dev dependencies
+            poetry install
+      - save_cache:
+          paths:
+          paths:
+            - ./.mypy_cache
+            - /home/circleci/.cache/pypoetry/
+          key: v1-dependencies-{{ checksum "pyproject.lock" }}
+
+      - run:
+          name: run tests
+          command: |
+            poetry run mypy .
+            poetry run black --check .
+            poetry run flake8 .
