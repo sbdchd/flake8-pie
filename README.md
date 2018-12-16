@@ -1,5 +1,30 @@
 # no-assignment-and-return
 
+> An extension for flake8 which checks for assignment (`=`) then `return` in Python
+
+
+A Flake8 lint based on Clippy's
+[`let_and_return`](https://rust-lang.github.io/rust-clippy/master/index.html#let_and_return)
+and Microsoft's TSLint lint
+[`no-unnecessary-local-variable`](https://github.com/Microsoft/tslint-microsoft-contrib).
+
+## examples
+
+
+```python
+# error
+def foo():
+   x = bar()
+   return x
+
+# allowed
+def foo():
+   x, _ = bar()
+   return x
+```
+
+see: `flake8_assign_and_return.py` for all the test cases
+
 
 ## dev
 
