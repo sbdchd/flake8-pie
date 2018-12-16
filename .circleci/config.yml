@@ -33,7 +33,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            poetry run pytest
+            poetry run pytest *.py
 
 
   lint:
