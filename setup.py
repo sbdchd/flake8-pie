@@ -43,7 +43,7 @@ if __name__ == "__main__":
         classifiers=[
             "Intended Audience :: Developers",
             "Environment :: Console",
-            "Programming Language :: Python :: 3.5",
+            "Programming Language :: Python :: 3.6",
             "Operating System :: OS Independent",
             "License :: OSI Approved :: MIT License",
             "Topic :: Software Development :: Quality Assurance",
