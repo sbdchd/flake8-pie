@@ -8,6 +8,9 @@ A Flake8 lint based on Clippy's
 and Microsoft's TSLint lint
 [`no-unnecessary-local-variable`](https://github.com/Microsoft/tslint-microsoft-contrib).
 
+For more info on the structure of this lint, see the [accompanying blog
+post](https://steve.dignam.xyz/2018/12/16/creating-a-flake8-lint/).
+
 ## examples
 
 
