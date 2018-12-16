@@ -1,0 +1,12 @@
+# from https://github.com/ambv/black/blob/fe24a15b84955130f23c8ab9490d1cdb98607b53/.flake8
+[flake8]
+ignore = E501, W503
+max-line-length = 80
+max-complexity = 18
+select = B,C,E,F,W,T4,B9
+# ignore directories
+exclude =
+  .git,
+  __pycache__,
+  dist,
+  build

@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "python-lint"
+version = "0.1.0"
+description = ""
+authors = ["Steve Dignam <steve@dignam.xyz>"]
+
+[tool.poetry.dependencies]
+python = "*"
+pytest = "^4.0"
+pytest-watch = "^4.2"
+
+[tool.poetry.dev-dependencies]
+black = "^18.3-alpha.0"
+mypy = "^0.650.0"
+flake8 = "^3.6"
