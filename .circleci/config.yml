@@ -36,7 +36,6 @@ jobs:
             poetry run pytest
 
 
-
   lint:
     docker:
       - image: circleci/python:3.6.1
@@ -73,3 +72,11 @@ jobs:
             poetry run mypy .
             poetry run black --check .
             poetry run flake8 .
+
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+      - lint
