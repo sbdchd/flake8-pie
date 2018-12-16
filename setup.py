@@ -12,13 +12,19 @@ def get_version(fname: str) -> Optional[str]:
     return None
 
 
+def get_long_description() -> str:
+    with open("README.md", "r") as fh:
+        return fh.read()
+
+
 description = "Extension for flake8 which checks for assignment then return"
 
 setup(
     name="flake8-assign-and-return",
     version=get_version("flake8_assign_and_return.py"),
     description=description,
-    long_description=description,
+    long_description=get_long_description(),
+    long_description_content_type="text/markdown",
     license="BSD2 License",
     author="Steve Dignam",
     author_email="steve@dignam.xyz",
@@ -28,9 +34,10 @@ setup(
     classifiers=[
         "Intended Audience :: Developers",
         "Environment :: Console",
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.5",
         "Operating System :: OS Independent",
         "License :: OSI Approved :: MIT License",
+        "Topic :: Software Development :: Quality Assurance",
     ],
     keywords="flake8, lint",
     entry_points={

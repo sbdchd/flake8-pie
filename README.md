@@ -33,7 +33,7 @@ see: `flake8_assign_and_return.py` for all the test cases
 poetry install
 
 # install plugin to work with flake8
-poetry run python ./setup.py install
+poetry run python setup.py install
 
 # test
 poetry run pytest *.py
@@ -48,4 +48,14 @@ poetry run black .
 
 # lint
 poetry run flake8 .
+```
+
+## uploading a new version to [PyPi](https://pypi.org)
+
+```shell
+# build new distribution files
+poetry run python setup.py sdist bdist_wheel
+
+# upload to pypi (Note: this will ask for login credentials)
+poetry run twine upload dist/*
 ```
