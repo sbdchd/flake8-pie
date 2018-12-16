@@ -12,19 +12,27 @@ def get_version(fname: str) -> Optional[str]:
     return None
 
 
-def get_long_description() -> str:
-    with open("README.md", "r") as fh:
+def get_description(fname: str) -> Optional[str]:
+    with open(fname) as f:
+        for line in f:
+            if line.startswith(">"):
+                return line[1:].strip()
+    return None
+
+
+def get_long_description(fname: str) -> str:
+    with open(fname, "r") as fh:
         return fh.read()
 
 
-description = "Extension for flake8 which checks for assignment then return"
+README = "README.md"
 
 if __name__ == "__main__":
     setup(
         name="flake8-assign-and-return",
         version=get_version("flake8_assign_and_return.py"),
-        description=description,
-        long_description=get_long_description(),
+        description=get_description(README),
+        long_description=get_long_description(README),
         long_description_content_type="text/markdown",
         license="BSD2 License",
         author="Steve Dignam",

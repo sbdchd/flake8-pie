@@ -1,6 +1,6 @@
-# no-assignment-and-return [![CircleCI](https://circleci.com/gh/sbdchd/flake8-assign-and-return.svg?style=svg)](https://circleci.com/gh/sbdchd/flake8-assign-and-return) [![pypi](https://img.shields.io/pypi/v/flake8-assign-and-return.svg)](https://pypi.python.org/pypi/flake8-assign-and-return)
+# no-assignment-and-return [![CircleCI](https://circleci.com/gh/sbdchd/flake8-assign-and-return.svg?style=svg)](https://circleci.com/gh/sbdchd/flake8-assign-and-return) [![pypi](https://img.shields.io/pypi/v/flake8-assign-and-return.svg)](https://pypi.org/project/flake8-assign-and-return/)
 
-> An extension for flake8 which checks for assignment (`=`) then `return` in Python
+> A flake8 extension that checks for assignment and return in Python
 
 
 A Flake8 lint based on Clippy's
