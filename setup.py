@@ -19,7 +19,7 @@ def get_long_description() -> str:
 
 description = "Extension for flake8 which checks for assignment then return"
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     setup(
         name="flake8-assign-and-return",
         version=get_version("flake8_assign_and_return.py"),
