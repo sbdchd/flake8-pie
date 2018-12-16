@@ -26,7 +26,6 @@ jobs:
             poetry install
       - save_cache:
           paths:
-          paths:
             - ./.mypy_cache
             - /home/circleci/.cache/pypoetry/
           key: v1-dependencies-{{ checksum "pyproject.lock" }}
@@ -63,7 +62,6 @@ jobs:
             # Install our dev dependencies
             poetry install
       - save_cache:
-          paths:
           paths:
             - ./.mypy_cache
             - /home/circleci/.cache/pypoetry/
