@@ -48,11 +48,13 @@ def is_assign_and_return(func: ast.FunctionDef) -> Optional[ErrorLoc]:
                 if len(assign_stmt.targets) == 1 and isinstance(
                     assign_stmt.targets[0], ast.Name
                 ):
-                    # that variable is the same one being returned
                     if isinstance(return_stmt.value, ast.Name):
-                        return B781(
-                            lineno=return_stmt.lineno, col_offset=return_stmt.col_offset
-                        )
+                        # check that assigned variable is the same one being returned
+                        if return_stmt.value.id == assign_stmt.targets[0].id:
+                            return B781(
+                                lineno=return_stmt.lineno,
+                                col_offset=return_stmt.col_offset,
+                            )
     return None
 
 
@@ -124,6 +126,16 @@ def foo():
 """,
             None,
             "valid because we don't return the useless assignment",
+        ),
+        (
+            """
+def foo():
+   z = "foo"
+   return x
+""",
+            None,
+            "valid as don't return the useless assignment, but we don't warn "
+            "about the useless assignment since that is already handled by flake8",
         ),
     ]
 
