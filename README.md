@@ -54,7 +54,7 @@ poetry run flake8 .
 
 ```shell
 # build new distribution files
-poetry run python setup.py sdist bdist_wheel
+rm -rf dist && poetry run python setup.py sdist bdist_wheel
 
 # upload to pypi (Note: this will ask for login credentials)
 poetry run twine upload dist/*
