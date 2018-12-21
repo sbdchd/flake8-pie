@@ -33,7 +33,9 @@ jobs:
       - run:
           name: run tests
           command: |
-            poetry run pytest
+            # NOTE: we run pytest via python to get paths to work
+            # see: https://github.com/pytest-dev/pytest/issues/2287
+            poetry run python -m pytest
 
 
   lint:
@@ -67,7 +69,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pyproject.lock" }}
 
       - run:
-          name: run tests
+          name: run lint
           command: |
             poetry run mypy *.py
             poetry run black --check .
