@@ -7,11 +7,9 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "pyproject.lock" }}
-          # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
       - run:
@@ -33,7 +31,11 @@ jobs:
       - run:
           name: run tests
           command: |
-            poetry run pytest *.py
+            # NOTE: we have to do some finagling to get python paths to work
+            # see:
+            #   https://github.com/pytest-dev/pytest/issues/2287
+            #   https://stackoverflow.com/a/26544761/3720597
+            PYTHONPATH=. poetry run pytest
 
 
   lint:
@@ -43,11 +45,9 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "pyproject.lock" }}
-          # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
       - run:
@@ -67,9 +67,9 @@ jobs:
           key: v1-dependencies-{{ checksum "pyproject.lock" }}
 
       - run:
-          name: run tests
+          name: run lint
           command: |
-            poetry run mypy .
+            poetry run mypy *.py
             poetry run black --check .
             poetry run flake8 .
 
