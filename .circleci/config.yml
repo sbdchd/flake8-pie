@@ -31,7 +31,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            # NOTE: we run pytest via python to get paths to work
+            # NOTE: we have to do some finagling to get python paths to work
             # see:
             #   https://github.com/pytest-dev/pytest/issues/2287
             #   https://stackoverflow.com/a/26544761/3720597
