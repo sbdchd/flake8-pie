@@ -1,5 +1,5 @@
 import ast
-from typing import Optional, Type, List
+from typing import Optional
 
 import pytest
 
