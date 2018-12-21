@@ -1,11 +1,11 @@
 version: 2
 
 jobs:
-  test: &test
+  test: &base
     docker:
       - image: circleci/python:3.6.1
 
-    steps:
+    steps: &steps
       - checkout
 
       - restore_cache:
@@ -40,7 +40,9 @@ jobs:
 
 
   lint:
-    <<: &test
+    <<: *base
+    steps:
+    <<: *steps
       - run:
           name: run lint
           command: |
