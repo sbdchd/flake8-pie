@@ -39,12 +39,12 @@ poetry install
 poetry run python setup.py install
 
 # test
-poetry run pytest *.py
+poetry run pytest
 # or with watch
-poetry run ptw *.py
+poetry run ptw
 
 # typecheck
-poetry run mypy .
+poetry run mypy *.py
 
 # format
 poetry run black .
