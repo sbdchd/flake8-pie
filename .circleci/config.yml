@@ -33,7 +33,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            poetry run pytest *.py
+            poetry run pytest
 
 
   lint:
@@ -69,7 +69,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            poetry run mypy .
+            poetry run mypy *.py
             poetry run black --check .
             poetry run flake8 .
 
