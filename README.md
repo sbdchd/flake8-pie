@@ -56,6 +56,8 @@ poetry run flake8 .
 ## uploading a new version to [PyPi](https://pypi.org)
 
 ```shell
+# increment `__version__` and pyproject.toml `version`
+
 # build new distribution files
 rm -rf dist && poetry run python setup.py sdist bdist_wheel
 

@@ -1,8 +1,8 @@
-from typing import Optional, List, NamedTuple, Iterable, Tuple
+from typing import Optional, List, NamedTuple, Iterable
 from functools import partial
 import ast
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 
 class ErrorLoc(NamedTuple):
@@ -35,8 +35,9 @@ class AssignAndReturnVisitor(ast.NodeVisitor):
 
 def get_assign_target_id(stmt: ast.stmt) -> Optional[str]:
     """
-    We can have two types of assignments statements, ast.Assign, which is the
-    usual assignment, and then ast.AnnAssign, which includes a type hint.
+    We can have two types of assignments statements:
+        - ast.Assign: usual assignment
+        - ast.AnnAssign: assignment with a type hint
 
     Here we check accordingly and return the `id`.
     """
@@ -79,7 +80,7 @@ class AssignAndReturnCheck:
     def __init__(self, tree: ast.Module) -> None:
         self.tree = tree
 
-    def run(self) -> Iterable[Tuple]:
+    def run(self) -> Iterable[ErrorLoc]:
         visitor = AssignAndReturnVisitor()
 
         visitor.visit(self.tree)
