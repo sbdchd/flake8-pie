@@ -33,6 +33,24 @@ class AssignAndReturnVisitor(ast.NodeVisitor):
         return f"<{self.__class__.__name__}: errors={self.errors}>"
 
 
+def get_assign_target_id(stmt: ast.stmt) -> Optional[str]:
+    """
+    We can have two types of assignments statements, ast.Assign, which is the
+    usual assignment, and then ast.AnnAssign, which includes a type hint.
+
+    Here we check accordingly and return the `id`.
+    """
+    if (
+        isinstance(stmt, ast.Assign)
+        and len(stmt.targets) == 1
+        and isinstance(stmt.targets[0], ast.Name)
+    ):
+        return stmt.targets[0].id
+    elif isinstance(stmt, ast.AnnAssign) and isinstance(stmt.target, ast.Name):
+        return stmt.target.id
+    return None
+
+
 def is_assign_and_return(func: ast.FunctionDef) -> Optional[ErrorLoc]:
     """
     check a FunctionDef for assignment and return where a user assigns to a
@@ -41,20 +59,16 @@ def is_assign_and_return(func: ast.FunctionDef) -> Optional[ErrorLoc]:
     # assign and return can only occur with at least two statements
     if len(func.body) >= 2:
         return_stmt = func.body[-1]
-        if isinstance(return_stmt, ast.Return):
+        if isinstance(return_stmt, ast.Return) and isinstance(
+            return_stmt.value, ast.Name
+        ):
             assign_stmt = func.body[-2]
-            if isinstance(assign_stmt, ast.Assign):
-                # only assigned to a single variable
-                if len(assign_stmt.targets) == 1 and isinstance(
-                    assign_stmt.targets[0], ast.Name
-                ):
-                    if isinstance(return_stmt.value, ast.Name):
-                        # check that assigned variable is the same one being returned
-                        if return_stmt.value.id == assign_stmt.targets[0].id:
-                            return B781(
-                                lineno=return_stmt.lineno,
-                                col_offset=return_stmt.col_offset,
-                            )
+            assign_id = get_assign_target_id(assign_stmt)
+            if return_stmt.value.id == assign_id:
+                return B781(
+                    lineno=return_stmt.lineno, col_offset=return_stmt.col_offset
+                )
+
     return None
 
 
