@@ -67,6 +67,29 @@ def foo():
         "valid as don't return the useless assignment, but we don't warn "
         "about the useless assignment since that is already handled by flake8",
     ),
+    (
+        """
+def get_foo(id) -> Optional[Foo]:
+    maybeFoo: Optional[Foo] = Foo.objects.filter(
+        id=id
+    ).first()
+    return maybeFoo
+""",
+        B781(lineno=6, col_offset=4),
+        "even though we are assigning with a type, a cast would be better "
+        "and would remove the extra assignment",
+    ),
+    (
+        """
+def get_foo(id) -> Optional[Foo]:
+    maybeFoo: Optional[Foo] = Foo.objects.filter(
+        id=id
+    ).first()
+    return bar
+""",
+        None,
+        "we return a different variable",
+    ),
 ]
 
 
