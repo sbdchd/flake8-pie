@@ -29,8 +29,8 @@ README = "README.md"
 
 if __name__ == "__main__":
     setup(
-        name="flake8-assign-and-return",
-        version=get_version("flake8_assign_and_return.py"),
+        name="flake8-pie",
+        version=get_version("flake8_pie.py"),
         description=get_description(README),
         long_description=get_long_description(README),
         long_description_content_type="text/markdown",
@@ -39,20 +39,18 @@ if __name__ == "__main__":
         author_email="steve@dignam.xyz",
         maintainer="Steve Dignam",
         maintainer_email="steve@dignam.xyz",
-        url="https://github.com/sbdchd/flake8-assign-and-return",
+        url="https://github.com/sbdchd/flake8-pie",
         classifiers=[
             "Intended Audience :: Developers",
             "Environment :: Console",
             "Programming Language :: Python :: 3.6",
             "Operating System :: OS Independent",
-            "License :: OSI Approved :: MIT License",
+            "License :: OSI Approved :: BSD License",
             "Topic :: Software Development :: Quality Assurance",
         ],
         keywords="flake8, lint",
-        entry_points={
-            "flake8.extension": ["B = flake8_assign_and_return:AssignAndReturnCheck"]
-        },
+        entry_points={"flake8.extension": ["B = flake8_pie:Flake8PieCheck"]},
         install_requires=["flake8"],
-        provides=["flake8_assign_and_return"],
-        py_modules=["flake8_assign_and_return"],
+        provides=["flake8_pie"],
+        py_modules=["flake8_pie"],
     )

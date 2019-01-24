@@ -3,12 +3,12 @@ from typing import Optional
 
 import pytest
 
-from flake8_assign_and_return import (
+from flake8_pie import (
     B781,
     ErrorLoc,
     is_assign_and_return,
-    AssignAndReturnVisitor,
-    AssignAndReturnCheck,
+    Flake8PieVisitor,
+    Flake8PieCheck,
 )
 
 
@@ -106,8 +106,8 @@ def test_is_assign_and_return(
 
     expected_errors = [expected] if expected is not None else []
 
-    visitor = AssignAndReturnVisitor()
+    visitor = Flake8PieVisitor()
     visitor.visit(node)
     assert visitor.errors == expected_errors, reason
 
-    assert list(AssignAndReturnCheck(node).run()) == expected_errors, reason
+    assert list(Flake8PieCheck(node).run()) == expected_errors, reason

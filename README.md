@@ -1,17 +1,21 @@
-# no-assignment-and-return [![CircleCI](https://circleci.com/gh/sbdchd/flake8-assign-and-return.svg?style=svg)](https://circleci.com/gh/sbdchd/flake8-assign-and-return) [![pypi](https://img.shields.io/pypi/v/flake8-assign-and-return.svg)](https://pypi.org/project/flake8-assign-and-return/)
+# flake8-pie [![CircleCI](https://circleci.com/gh/sbdchd/flake8-pie.svg?style=svg)](https://circleci.com/gh/sbdchd/flake8-pie) [![pypi](https://img.shields.io/pypi/v/flake8-pie.svg)](https://pypi.org/project/flake8-pie/)
 
-> A flake8 extension that checks for assignment and return in Python
+> A flake8 extension that implements misc. lints
 
 
-A Flake8 lint based on Clippy's
+## lints
+
+### B781: Assign and Return
+
+Based on Clippy's
 [`let_and_return`](https://rust-lang.github.io/rust-clippy/master/index.html#let_and_return)
-and Microsoft's TSLint lint
+and Microsoft's TSLint rule
 [`no-unnecessary-local-variable`](https://github.com/Microsoft/tslint-microsoft-contrib).
 
 For more info on the structure of this lint, see the [accompanying blog
 post](https://steve.dignam.xyz/2018/12/16/creating-a-flake8-lint/).
 
-## examples
+#### examples
 
 
 ```python
@@ -25,8 +29,6 @@ def foo():
    x, _ = bar()
    return x
 ```
-
-see: `flake8_assign_and_return.py` for all the test cases
 
 
 ## dev
