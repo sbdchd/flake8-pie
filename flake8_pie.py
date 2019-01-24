@@ -14,10 +14,10 @@ class ErrorLoc(NamedTuple):
     col_offset: int
 
     message: str
-    type: "AssignAndReturnCheck"
+    type: "Flake8PieCheck"
 
 
-class AssignAndReturnVisitor(ast.NodeVisitor):
+class Flake8PieVisitor(ast.NodeVisitor):
     def __init__(self) -> None:
         self.errors: List[ErrorLoc] = []
 
@@ -73,15 +73,15 @@ def is_assign_and_return(func: ast.FunctionDef) -> Optional[ErrorLoc]:
     return None
 
 
-class AssignAndReturnCheck:
-    name = "flake8-assign-and-return"
+class Flake8PieCheck:
+    name = "flake8-pie"
     version = __version__
 
     def __init__(self, tree: ast.Module) -> None:
         self.tree = tree
 
     def run(self) -> Iterable[ErrorLoc]:
-        visitor = AssignAndReturnVisitor()
+        visitor = Flake8PieVisitor()
 
         visitor.visit(self.tree)
 
