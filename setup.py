@@ -49,9 +49,7 @@ if __name__ == "__main__":
             "Topic :: Software Development :: Quality Assurance",
         ],
         keywords="flake8, lint",
-        entry_points={
-            "flake8.extension": ["B = flake8_pie:Flake8PieCheck"]
-        },
+        entry_points={"flake8.extension": ["B = flake8_pie:Flake8PieCheck"]},
         install_requires=["flake8"],
         provides=["flake8_pie"],
         py_modules=["flake8_pie"],
