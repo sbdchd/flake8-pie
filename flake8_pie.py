@@ -91,5 +91,5 @@ class Flake8PieCheck:
 B781 = partial(
     ErrorLoc,
     message="B781: You are assinging to a variable and then returning. Instead remove the assignment and return.",
-    type=AssignAndReturnCheck,
+    type=Flake8PieCheck,
 )

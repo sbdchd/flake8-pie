@@ -8,7 +8,7 @@ from flake8_pie import (
     ErrorLoc,
     is_assign_and_return,
     Flake8PieVisitor,
-    Flake8Check,
+    Flake8PieCheck,
 )
 
 
@@ -110,4 +110,4 @@ def test_is_assign_and_return(
     visitor.visit(node)
     assert visitor.errors == expected_errors, reason
 
-    assert list(Flake8Check(node).run()) == expected_errors, reason
+    assert list(Flake8PieCheck(node).run()) == expected_errors, reason
