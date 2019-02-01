@@ -3,13 +3,7 @@ from typing import Optional
 
 import pytest
 
-from flake8_pie import (
-    B781,
-    B782,
-    ErrorLoc,
-    is_assign_and_return,
-    Flake8PieCheck,
-)
+from flake8_pie import B781, B782, ErrorLoc, is_assign_and_return, Flake8PieCheck
 
 
 func_test_cases = [
