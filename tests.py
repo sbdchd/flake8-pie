@@ -5,9 +5,9 @@ import pytest
 
 from flake8_pie import (
     B781,
+    B782,
     ErrorLoc,
     is_assign_and_return,
-    Flake8PieVisitor,
     Flake8PieCheck,
 )
 
@@ -106,8 +106,28 @@ def test_is_assign_and_return(
 
     expected_errors = [expected] if expected is not None else []
 
-    visitor = Flake8PieVisitor()
-    visitor.visit(node)
-    assert visitor.errors == expected_errors, reason
+    assert list(Flake8PieCheck(node).run()) == expected_errors, reason
 
+
+@pytest.mark.parametrize(
+    "func,expected,reason",
+    [
+        (
+            """
+x = (
+    f"foo {y}",
+    f"bar"
+)""",
+            B782(lineno=4, col_offset=4),
+            "f string with no templates",
+        ),
+        ("f'foo {y}'", None, "used template"),
+    ],
+)
+def test_no_pointless_f_strings(
+    func: str, expected: Optional[ErrorLoc], reason: str
+) -> None:
+    node = ast.parse(func)
+
+    expected_errors = [expected] if expected else []
     assert list(Flake8PieCheck(node).run()) == expected_errors, reason

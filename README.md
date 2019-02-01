@@ -31,6 +31,20 @@ def foo():
 ```
 
 
+### B782: No Pointless F Strings
+
+Warn about usage of f-string without templated values.
+
+#### examples
+
+```python
+x = (
+    f"foo {y}", # ok
+    f"bar" # error
+)
+```
+
+
 ## dev
 
 ```shell
