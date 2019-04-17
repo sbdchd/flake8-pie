@@ -42,7 +42,7 @@ def is_pointless_f_string(node: ast.JoinedStr) -> Optional[ErrorLoc]:
     for value in node.values:
         if isinstance(value, ast.FormattedValue):
             return None
-    return B782(lineno=node.lineno, col_offset=node.col_offset)
+    return PIE782(lineno=node.lineno, col_offset=node.col_offset)
 
 
 def get_assign_target_id(stmt: ast.stmt) -> Optional[str]:
@@ -78,7 +78,7 @@ def is_assign_and_return(func: ast.FunctionDef) -> Optional[ErrorLoc]:
             assign_stmt = func.body[-2]
             assign_id = get_assign_target_id(assign_stmt)
             if return_stmt.value.id == assign_id:
-                return B781(
+                return PIE781(
                     lineno=return_stmt.lineno, col_offset=return_stmt.col_offset
                 )
 
@@ -100,15 +100,15 @@ class Flake8PieCheck:
         yield from visitor.errors
 
 
-B781 = partial(
+PIE781 = partial(
     ErrorLoc,
-    message="B781: You are assinging to a variable and then returning. Instead remove the assignment and return.",
+    message="PIE781: You are assinging to a variable and then returning. Instead remove the assignment and return.",
     type=Flake8PieCheck,
 )
 
 
-B782 = partial(
+PIE782 = partial(
     ErrorLoc,
-    message="B782: Unncessary f-string. You can safely remove the `f` sigil.",
+    message="PIE782: Unncessary f-string. You can safely remove the `f` sigil.",
     type=Flake8PieCheck,
 )

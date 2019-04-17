@@ -3,7 +3,7 @@ from typing import Optional
 
 import pytest
 
-from flake8_pie import B781, B782, ErrorLoc, is_assign_and_return, Flake8PieCheck
+from flake8_pie import PIE781, PIE782, ErrorLoc, is_assign_and_return, Flake8PieCheck
 
 
 func_test_cases = [
@@ -13,7 +13,7 @@ def foo():
    x = 'bar'
    return x
 """,
-        B781(lineno=4, col_offset=3),
+        PIE781(lineno=4, col_offset=3),
         "single assign then return of that variable is not allowed",
     ),
     (
@@ -69,7 +69,7 @@ def get_foo(id) -> Optional[Foo]:
     ).first()
     return maybeFoo
 """,
-        B781(lineno=6, col_offset=4),
+        PIE781(lineno=6, col_offset=4),
         "even though we are assigning with a type, a cast would be better "
         "and would remove the extra assignment",
     ),
@@ -112,7 +112,7 @@ x = (
     f"foo {y}",
     f"bar"
 )""",
-            B782(lineno=4, col_offset=4),
+            PIE782(lineno=4, col_offset=4),
             "f string with no templates",
         ),
         ("f'foo {y}'", None, "used template"),

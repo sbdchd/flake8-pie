@@ -2,10 +2,9 @@
 
 > A flake8 extension that implements misc. lints
 
-
 ## lints
 
-### B781: Assign and Return
+### PIE781: Assign and Return
 
 Based on Clippy's
 [`let_and_return`](https://rust-lang.github.io/rust-clippy/master/index.html#let_and_return)
@@ -16,7 +15,6 @@ For more info on the structure of this lint, see the [accompanying blog
 post](https://steve.dignam.xyz/2018/12/16/creating-a-flake8-lint/).
 
 #### examples
-
 
 ```python
 # error
@@ -30,8 +28,7 @@ def foo():
    return x
 ```
 
-
-### B782: No Pointless F Strings
+### PIE782: No Pointless F Strings
 
 Warn about usage of f-string without templated values.
 
@@ -43,7 +40,6 @@ x = (
     f"bar" # error
 )
 ```
-
 
 ## dev
 
