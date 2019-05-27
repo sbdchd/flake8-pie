@@ -102,7 +102,7 @@ class Flake8PieCheck:
 
 PIE781 = partial(
     ErrorLoc,
-    message="PIE781: You are assinging to a variable and then returning. Instead remove the assignment and return.",
+    message="PIE781: You are assigning to a variable and then returning. Instead remove the assignment and return.",
     type=Flake8PieCheck,
 )
 
