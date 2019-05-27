@@ -2,7 +2,7 @@ from typing import Optional, List, NamedTuple, Iterable
 from functools import partial
 import ast
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 
 class ErrorLoc(NamedTuple):
