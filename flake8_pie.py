@@ -109,6 +109,6 @@ PIE781 = partial(
 
 PIE782 = partial(
     ErrorLoc,
-    message="PIE782: Unncessary f-string. You can safely remove the `f` sigil.",
+    message="PIE782: Unnecessary f-string. You can safely remove the `f` sigil.",
     type=Flake8PieCheck,
 )
