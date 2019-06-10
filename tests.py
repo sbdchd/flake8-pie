@@ -125,3 +125,12 @@ def test_no_pointless_f_strings(
 
     expected_errors = [expected] if expected else []
     assert list(Flake8PieCheck(node).run()) == expected_errors, reason
+
+
+def test_checker_matches_flake8_api() -> None:
+    """
+    flake8 requires checkers have both a name and a version
+    see: https://gitlab.com/pycqa/flake8/blob/027ed1c9cc5087b611630aea08dd67a498e701a4/src/flake8/plugins/manager.py#L110
+    """
+    assert Flake8PieCheck.version
+    assert Flake8PieCheck.name
