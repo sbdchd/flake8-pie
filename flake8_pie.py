@@ -2,8 +2,6 @@ from typing import Optional, List, NamedTuple, Iterable
 from functools import partial
 import ast
 
-__version__ = "0.2.2"
-
 
 class ErrorLoc(NamedTuple):
     """
@@ -87,7 +85,7 @@ def is_assign_and_return(func: ast.FunctionDef) -> Optional[ErrorLoc]:
 
 class Flake8PieCheck:
     name = "flake8-pie"
-    version = __version__
+    version = "0.2.2"
 
     def __init__(self, tree: ast.Module) -> None:
         self.tree = tree
