@@ -1,8 +1,20 @@
 [tool.poetry]
-name = "python-lint"
+name = "flake8-pie"
 version = "0.2.2"
-description = ""
+description = "A flake8 extension that implements misc. lints"
+repository = "https://github.com/sbdchd/flake8-pie"
 authors = ["Steve Dignam <steve@dignam.xyz>"]
+license = "BSD-2-Clause"
+readme = "README.md"
+keywords = ["flake8", "lint"]
+classifiers=[
+    "Intended Audience :: Developers",
+    "Environment :: Console",
+    "Programming Language :: Python :: 3.6",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: BSD License",
+    "Topic :: Software Development :: Quality Assurance",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.6"
@@ -17,3 +29,11 @@ twine = "^1.12"
 pytest-watch = "^4.2"
 pytest = "^4.0"
 ipython = "^7.2"
+
+[tool.poetry.plugins]
+[tool.poetry.plugins."flake8.extension"]
+PIE = "flake8_pie:Flake8PieCheck"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

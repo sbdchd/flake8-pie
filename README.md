@@ -73,11 +73,9 @@ poetry run flake8 .
 ## uploading a new version to [PyPi](https://pypi.org)
 
 ```shell
-# increment `__version__` and pyproject.toml `version`
+# increment pyproject.toml `version`
 
-# build new distribution files
-rm -rf dist && poetry run python setup.py sdist bdist_wheel
-
-# upload to pypi (Note: this will ask for login credentials)
-poetry run twine upload dist/*
+# build new distribution files and upload to pypi
+# Note: this will ask for login credentials
+rm -rf dist && poetry publish --build
 ```
