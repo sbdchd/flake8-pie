@@ -73,7 +73,7 @@ poetry run flake8 .
 ## uploading a new version to [PyPi](https://pypi.org)
 
 ```shell
-# increment pyproject.toml `version`
+# increment `Flake8PieCheck.version` and pyproject.toml `version`
 
 # build new distribution files and upload to pypi
 # Note: this will ask for login credentials
