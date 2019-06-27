@@ -110,7 +110,7 @@ def is_celery_task_missing_name(func: ast.FunctionDef) -> Optional[ErrorLoc]:
 
 class Flake8PieCheck:
     name = "flake8-pie"
-    version = "0.2.2"
+    version = "0.3.0"
 
     def __init__(self, tree: ast.Module) -> None:
         self.tree = tree
