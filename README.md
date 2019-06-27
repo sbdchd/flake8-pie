@@ -49,7 +49,10 @@ x = (
 
 ### PIE783: Celery tasks should have explicit names.
 
-Warn about Celery task definitions that don't have explicit names.
+Warn about [Celery](https://pypi.org/project/celery/) task definitions that don't have explicit names.
+
+Note: this lint is kind of naive considering any decorator with a `.task()`
+method or any decorator called `shared_task()` a Celery decorator.
 
 #### examples
 
