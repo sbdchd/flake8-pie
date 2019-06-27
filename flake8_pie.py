@@ -26,6 +26,9 @@ class Flake8PieVisitor(ast.NodeVisitor):
         error = is_assign_and_return(node)
         if error:
             self.errors.append(error)
+        error = is_celery_task_missing_name(node)
+        if error:
+            self.errors.append(error)
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         error = is_pointless_f_string(node)
@@ -83,6 +86,28 @@ def is_assign_and_return(func: ast.FunctionDef) -> Optional[ErrorLoc]:
     return None
 
 
+def is_celery_task_missing_name(func: ast.FunctionDef) -> Optional[ErrorLoc]:
+    """
+    check if a Celery task definition is missing an explicit name.
+    """
+    if func.decorator_list:
+        # TODO(sbdchd): search all decorators of func
+        first_dec = func.decorator_list[0]
+        if isinstance(first_dec.func, ast.Name):
+            if first_dec.func.id == "shared_task":
+                if all(k.arg != "name" for k in first_dec.keywords):
+                    return PIE783(
+                        lineno=first_dec.lineno, col_offset=first_dec.col_offset
+                    )
+        if isinstance(first_dec.func, ast.Attribute):
+            if first_dec.func.attr == "task":
+                if all(k.arg != "name" for k in first_dec.keywords):
+                    return PIE783(
+                        lineno=first_dec.lineno, col_offset=first_dec.col_offset
+                    )
+    return None
+
+
 class Flake8PieCheck:
     name = "flake8-pie"
     version = "0.2.2"
@@ -108,5 +133,11 @@ PIE781 = partial(
 PIE782 = partial(
     ErrorLoc,
     message="PIE782: Unnecessary f-string. You can safely remove the `f` prefix.",
+    type=Flake8PieCheck,
+)
+
+PIE783 = partial(
+    ErrorLoc,
+    message="PIE783: Celery tasks should have explicit names.",
     type=Flake8PieCheck,
 )
