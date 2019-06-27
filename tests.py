@@ -3,7 +3,14 @@ from typing import Optional
 
 import pytest
 
-from flake8_pie import PIE781, PIE782, ErrorLoc, is_assign_and_return, Flake8PieCheck
+from flake8_pie import (
+    PIE781,
+    PIE782,
+    PIE783,
+    ErrorLoc,
+    is_assign_and_return,
+    Flake8PieCheck,
+)
 
 
 func_test_cases = [
@@ -134,3 +141,86 @@ def test_checker_matches_flake8_api() -> None:
     """
     assert Flake8PieCheck.version
     assert Flake8PieCheck.name
+
+
+@pytest.mark.parametrize(
+    "code,expected",
+    [
+        (
+            """
+@shared_task(bind=True)
+def import_users():
+    pass
+""",
+            PIE783(lineno=2, col_offset=1),
+        ),
+        (
+            """
+@shared_task(bind=True, name="tasks.import_users")
+def import_users():
+    pass
+""",
+            None,
+        ),
+        (
+            """
+@app.task(
+    autoretry_for=(Exception,),
+    retry_backoff=True,
+    serializer="pickle",
+)
+def send_messages(messages):
+    pass
+""",
+            PIE783(lineno=2, col_offset=1),
+        ),
+        (
+            """
+@celery.task(
+    autoretry_for=(Exception,),
+    retry_backoff=True,
+)
+def send_messages(messages):
+    pass
+""",
+            PIE783(lineno=2, col_offset=1),
+        ),
+        (
+            """
+@app.task(
+    name="emails.tasks.send_messages",
+    autoretry_for=(Exception,),
+    retry_backoff=True,
+)
+def send_messages(messages):
+    pass
+""",
+            None,
+        ),
+        (
+            """
+@foo
+@celery.task(
+    autoretry_for=(Exception,),
+    retry_backoff=True,
+)
+@bar
+def send_messages(messages):
+    pass
+""",
+            PIE783(lineno=3, col_offset=1),
+        ),
+        (
+            """
+def foo():
+    pass
+""",
+            None,
+        ),
+    ],
+)
+def test_celery_task_name_lint(code: str, expected: Optional[ErrorLoc]) -> None:
+    node = ast.parse(code)
+
+    expected_errors = [expected] if expected else []
+    assert list(Flake8PieCheck(node).run()) == expected_errors, "missing name property"
