@@ -93,18 +93,19 @@ def is_celery_task_missing_name(func: ast.FunctionDef) -> Optional[ErrorLoc]:
     if func.decorator_list:
         # TODO(sbdchd): search all decorators of func
         first_dec = func.decorator_list[0]
-        if isinstance(first_dec.func, ast.Name):
-            if first_dec.func.id == "shared_task":
-                if all(k.arg != "name" for k in first_dec.keywords):
-                    return PIE783(
-                        lineno=first_dec.lineno, col_offset=first_dec.col_offset
-                    )
-        if isinstance(first_dec.func, ast.Attribute):
-            if first_dec.func.attr == "task":
-                if all(k.arg != "name" for k in first_dec.keywords):
-                    return PIE783(
-                        lineno=first_dec.lineno, col_offset=first_dec.col_offset
-                    )
+        if isinstance(first_dec, ast.Call):
+            if isinstance(first_dec.func, ast.Name):
+                if first_dec.func.id == "shared_task":
+                    if all(k.arg != "name" for k in first_dec.keywords):
+                        return PIE783(
+                            lineno=first_dec.lineno, col_offset=first_dec.col_offset
+                        )
+            if isinstance(first_dec.func, ast.Attribute):
+                if first_dec.func.attr == "task":
+                    if all(k.arg != "name" for k in first_dec.keywords):
+                        return PIE783(
+                            lineno=first_dec.lineno, col_offset=first_dec.col_offset
+                        )
     return None
 
 
