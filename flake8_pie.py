@@ -86,26 +86,25 @@ def is_assign_and_return(func: ast.FunctionDef) -> Optional[ErrorLoc]:
     return None
 
 
+def has_name_kwarg(dec: ast.Call) -> bool:
+    return all(k.arg != "name" for k in dec.keywords)
+
+
 def is_celery_task_missing_name(func: ast.FunctionDef) -> Optional[ErrorLoc]:
     """
     check if a Celery task definition is missing an explicit name.
     """
     if func.decorator_list:
-        # TODO(sbdchd): search all decorators of func
-        first_dec = func.decorator_list[0]
-        if isinstance(first_dec, ast.Call):
-            if isinstance(first_dec.func, ast.Name):
-                if first_dec.func.id == "shared_task":
-                    if all(k.arg != "name" for k in first_dec.keywords):
-                        return PIE783(
-                            lineno=first_dec.lineno, col_offset=first_dec.col_offset
-                        )
-            if isinstance(first_dec.func, ast.Attribute):
-                if first_dec.func.attr == "task":
-                    if all(k.arg != "name" for k in first_dec.keywords):
-                        return PIE783(
-                            lineno=first_dec.lineno, col_offset=first_dec.col_offset
-                        )
+        for dec in func.decorator_list:
+            if isinstance(dec, ast.Call):
+                if isinstance(dec.func, ast.Name):
+                    if dec.func.id == "shared_task":
+                        if has_name_kwarg(dec):
+                            return PIE783(lineno=dec.lineno, col_offset=dec.col_offset)
+                if isinstance(dec.func, ast.Attribute):
+                    if dec.func.attr == "task":
+                        if has_name_kwarg(dec):
+                            return PIE783(lineno=dec.lineno, col_offset=dec.col_offset)
     return None
 
 

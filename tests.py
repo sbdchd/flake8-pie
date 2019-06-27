@@ -197,6 +197,26 @@ def send_messages(messages):
 """,
             None,
         ),
+        (
+            """
+@foo
+@celery.task(
+    autoretry_for=(Exception,),
+    retry_backoff=True,
+)
+@bar
+def send_messages(messages):
+    pass
+""",
+            PIE783(lineno=3, col_offset=1),
+        ),
+        (
+            """
+def foo():
+    pass
+""",
+            None,
+        ),
     ],
 )
 def test_celery_task_name_lint(code: str, expected: Optional[ErrorLoc]) -> None:
