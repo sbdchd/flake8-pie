@@ -9,6 +9,8 @@ Note: flake8-pie requires Python 3.6 or greater
 - PIE781: You are assigning to a variable and then returning. Instead remove the assignment and return.
 - PIE782: Unnecessary f-string. You can safely remove the `f` prefix.
 - PIE783: Celery tasks should have explicit names.
+- PIE784: Celery crontab should have an explicit minutes argument.
+- PIE785: Celery tasks should have expirations.
 
 ### PIE781: Assign and Return
 
@@ -67,6 +69,35 @@ def foo():
 def foo():
     pass
 ```
+
+### PIE784: Celery crontab should have an explicit minutes argument.
+
+The `crontab` class provided by Celery has some default args that are
+suprising to new users. Specifically, `crontab(hour="0,12")` won't run a task
+at midnight and noon, it will run the task at every minute during those two
+hours. This lint makes that call an error, forcing you to write
+`crontab(hour="0, 12", minute="*")`.
+
+Additionally, the lint is a bit more complex in that it requires you specify
+every smaller increment than the largest time increment you provide. So if you
+provide `days_of_week`, then you need to provide `hour`s and `minute`s
+explicitly.
+
+Note: if you like the default behavior of `crontab()` then you can either
+disable this lint or pass `"*"` for the `kwarg` value, e.g., `minutes="*"`.
+
+Also, since this lint is essentially a naive search for calls to a
+`crontab()` function, if you have a function named the same then this will
+cause false positives.
+
+### PIE785: Celery tasks should have expirations.
+
+Celery tasks can bunch up if they don't have expirations.
+
+This enforces specifying expirations in both the celery beat config dict and
+in `.apply_async()` calls.
+
+The same caveat applies about how this lint is naive.
 
 ## dev
 
