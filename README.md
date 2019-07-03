@@ -9,7 +9,7 @@ Note: flake8-pie requires Python 3.6 or greater
 - PIE781: You are assigning to a variable and then returning. Instead remove the assignment and return.
 - PIE782: Unnecessary f-string. You can safely remove the `f` prefix.
 - PIE783: Celery tasks should have explicit names.
-- PIE784: Celery crontab should have an explicit minutes argument.
+- PIE784: Celery crontab is missing explicit arguments.
 - PIE785: Celery tasks should have expirations.
 
 ### PIE781: Assign and Return
@@ -70,7 +70,7 @@ def foo():
     pass
 ```
 
-### PIE784: Celery crontab should have an explicit minutes argument.
+### PIE784: Celery crontab is missing explicit arguments.
 
 The `crontab` class provided by Celery has some default args that are
 suprising to new users. Specifically, `crontab(hour="0,12")` won't run a task

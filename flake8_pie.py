@@ -258,7 +258,7 @@ PIE783 = partial(
 
 PIE784 = partial(
     ErrorLoc,
-    message="PIE784: Celery crontab should have an explicit minutes argument.",
+    message="PIE784: Celery crontab is missing explicit arguments.",
     type=Flake8PieCheck,
 )
 
