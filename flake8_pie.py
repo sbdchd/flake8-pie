@@ -227,7 +227,7 @@ def is_celery_apply_async_missing_expires(node: ast.Call) -> Optional[ErrorLoc]:
 
 class Flake8PieCheck:
     name = "flake8-pie"
-    version = "0.4.0"
+    version = "0.4.1"
 
     def __init__(self, tree: ast.Module) -> None:
         self.tree = tree
