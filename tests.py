@@ -278,7 +278,7 @@ crontab(month_of_year="*", day_of_month="*", hour="0,12", minute="*"),
 )
 def test_celery_crontab_named_args(code: str, expected: Optional[ErrorLoc]) -> None:
     """
-    ensure we pass a minutes param to celery's crontab
+    ensure we pass a explicit params to celery's crontab
     see: https://github.com/celery/celery/blob/0736cff9d908c0519e07babe4de9c399c87cb32b/celery/schedules.py#L403
 
     You must pass all the params below the level you are creating.
