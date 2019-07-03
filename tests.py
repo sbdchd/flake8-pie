@@ -274,6 +274,18 @@ crontab(month_of_year="*", day_of_month="*", hour="0,12", minute="*"),
 """,
             PIE784(lineno=2, col_offset=0),
         ),
+        (
+            """
+crontab(),
+""",
+            PIE784(lineno=2, col_offset=0),
+        ),
+        (
+            """
+crontab(minute="*/5")
+""",
+            None,
+        ),
     ],
 )
 def test_celery_crontab_named_args(code: str, expected: Optional[ErrorLoc]) -> None:

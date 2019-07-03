@@ -138,8 +138,12 @@ CELERY_LS = ["minute", "hour", "day_of_week", "day_of_month", "month_of_year"]
 def is_invalid_celery_crontab(*, kwargs: List[ast.keyword]) -> bool:
     keyword_args = {k.arg for k in kwargs if k.arg is not None}
 
+    if not keyword_args:
+        return True
+
     largest_index = max(
-        CELERY_ARG_MAP[k] for k in keyword_args if CELERY_ARG_MAP.get(k)
+        (CELERY_ARG_MAP[k] for k in keyword_args if CELERY_ARG_MAP.get(k)),
+        default=0
     )
 
     for key in CELERY_LS[:largest_index]:
