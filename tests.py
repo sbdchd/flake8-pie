@@ -1,5 +1,6 @@
 import ast
 from typing import Optional
+import typing
 
 import pytest
 
@@ -7,9 +8,13 @@ from flake8_pie import (
     PIE781,
     PIE782,
     PIE783,
+    PIE784,
+    PIE785,
     ErrorLoc,
     is_assign_and_return,
     Flake8PieCheck,
+    is_invalid_celery_crontab,
+    is_celery_dict_task_definition,
 )
 
 
@@ -224,3 +229,203 @@ def test_celery_task_name_lint(code: str, expected: Optional[ErrorLoc]) -> None:
 
     expected_errors = [expected] if expected else []
     assert list(Flake8PieCheck(node).run()) == expected_errors, "missing name property"
+
+
+@pytest.mark.parametrize(
+    "code,expected",
+    [
+        (
+            """
+crontab(hour="0,12")
+""",
+            PIE784(lineno=2, col_offset=0),
+        ),
+        (
+            """
+crontab(hour="0,12", minute="*")
+""",
+            None,
+        ),
+        (
+            """
+crontab(hour="0,12", minute="*"),
+""",
+            None,
+        ),
+        (
+            """
+crontab(day_of_month="*", hour="0,12"),
+""",
+            PIE784(lineno=2, col_offset=0),
+        ),
+        (
+            """
+crontab(day_of_week="*", minute="*"),
+""",
+            PIE784(lineno=2, col_offset=0),
+        ),
+        (
+            """
+crontab(month_of_year="*", day_of_month="*", hour="0,12", minute="*"),
+""",
+            PIE784(lineno=2, col_offset=0),
+        ),
+    ],
+)
+def test_celery_crontab_named_args(code: str, expected: Optional[ErrorLoc]) -> None:
+    """
+    ensure we pass a minutes param to celery's crontab
+    see: https://github.com/celery/celery/blob/0736cff9d908c0519e07babe4de9c399c87cb32b/celery/schedules.py#L403
+
+    You must pass all the params below the level you are creating.
+    So if you pass hour, then you must pass minutes.
+    If you pass the day arg then you must provide hours and minutes, etc.
+
+    params:  minute, hour, day_of_week, day_of_month, month_of_year
+    """
+    node = ast.parse(code)
+
+    expected_errors = [expected] if expected else []
+    assert (
+        list(Flake8PieCheck(node).run()) == expected_errors
+    ), "missing a required argument"
+
+
+# TODO(sbdchd):
+# add support for beat tasks configured via hook
+#    sender.add_periodic_task(
+#        crontab(hour=7, minute=30, day_of_week=1),
+#        test.s('Happy Mondays!'),
+#    )
+
+
+@pytest.mark.parametrize(
+    "code,expected",
+    [
+        (
+            """
+{
+    "foo-bar": {
+        "task": "foo.task.bar",
+        "schedule": crontab(hour="0,12", minute=0),
+        "options": {"queue": "queue"},
+    }
+}
+""",
+            PIE785(lineno=6, col_offset=19),
+        ),
+        (
+            """
+{
+    "foo-bar": {
+        "task": "foo.task.bar",
+        "schedule": crontab(hour="0,12", minute=0),
+        "options": {"queue": "queue", "expires": 3 * 60},
+    }
+}
+""",
+            None,
+        ),
+        (
+            """
+foo_task.chunks(([id] for id in list_of_ids), 10).apply_async(
+    queue_name="queue", expires=3 * 60 * 60
+)
+""",
+            None,
+        ),
+        (
+            """
+foo_task.chunks(([id] for id in list_of_ids), 10).apply_async(
+    queue_name="queue"
+)
+""",
+            PIE785(lineno=2, col_offset=0),
+        ),
+        (
+            """
+foo.apply_async(
+    queue_name="queue"
+)
+""",
+            PIE785(lineno=2, col_offset=0),
+        ),
+    ],
+)
+def test_celery_require_task_expiration(
+    code: str, expected: Optional[ErrorLoc]
+) -> None:
+    node = ast.parse(code)
+
+    expected_errors = [expected] if expected else []
+    assert list(Flake8PieCheck(node).run()) == expected_errors, "missing expiration"
+
+
+@pytest.mark.parametrize(
+    "args,expected",
+    [
+        ({"minute", "hour"}, False),
+        ({"hour"}, True),
+        ({"hour", "day_of_week"}, True),
+        ({"minute", "hour", "day_of_week"}, False),
+        (
+            {
+                "minute",
+                "hour",
+                "day_of_week",
+                "day_of_month",
+                "month_of_year",
+                "another_random_arg",
+            },
+            False,
+        ),
+        ({"minute", "hour", "day_of_week", "day_of_month", "month_of_year"}, False),
+    ],
+)
+def test_invalid_celery_crontab_kwargs(args: typing.List[str], expected: bool) -> None:
+    kwargs = [ast.keyword(arg=arg, value=ast.Str(s="0,1")) for arg in args]
+    assert is_invalid_celery_crontab(kwargs=kwargs) == expected
+
+
+@pytest.mark.parametrize(
+    "dict_,expected",
+    [
+        (
+            """
+{
+    "task": "foo.task.bar",
+    "schedule": 4 * 60 * 60,
+    "options": {"queue": "queue"},
+}
+""",
+            True,
+        ),
+        (
+            """
+{"task": "foo.task.bar", "schedule": 10 * 60 * 60}
+""",
+            True,
+        ),
+        (
+            """
+{"task": "foo.task.bar"}
+""",
+            False,
+        ),
+        (
+            """
+{"schedule": 1}
+""",
+            False,
+        ),
+        (
+            """
+{"task": "foo.task.bar", "schedule": 3 * 60, "random-key": 10}
+""",
+            True,
+        ),
+    ],
+)
+def test_is_celery_dict_task_definition(dict_: str, expected: bool) -> None:
+    actual_dict = ast.parse(dict_).body[0].value
+    assert is_celery_dict_task_definition(actual_dict) == expected
