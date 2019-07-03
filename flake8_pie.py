@@ -30,10 +30,32 @@ class Flake8PieVisitor(ast.NodeVisitor):
         if error:
             self.errors.append(error)
 
+        self.generic_visit(node)
+
+    def visit_Call(self, node: ast.Call) -> None:
+        error = is_loose_crontab_call(node)
+        if error:
+            self.errors.append(error)
+
+        error = is_celery_apply_async_missing_expires(node)
+        if error:
+            self.errors.append(error)
+
+        self.generic_visit(node)
+
+    def visit_Dict(self, node: ast.Dict) -> None:
+        error = is_celery_task_missing_expires(node)
+        if error:
+            self.errors.append(error)
+
+        self.generic_visit(node)
+
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         error = is_pointless_f_string(node)
         if error:
             self.errors.append(error)
+
+        self.generic_visit(node)
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}: errors={self.errors}>"
@@ -108,6 +130,98 @@ def is_celery_task_missing_name(func: ast.FunctionDef) -> Optional[ErrorLoc]:
     return None
 
 
+# from: github.com/celery/celery/blob/0736cff9d908c0519e07babe4de9c399c87cb32b/celery/schedules.py#L403
+CELERY_ARG_MAP = dict(minute=0, hour=1, day_of_week=2, day_of_month=3, month_of_year=4)
+CELERY_LS = ["minute", "hour", "day_of_week", "day_of_month", "month_of_year"]
+
+
+def is_invalid_celery_crontab(*, kwargs: List[ast.keyword]) -> bool:
+    keyword_args = {k.arg for k in kwargs if k.arg is not None}
+
+    largest_index = max(
+        CELERY_ARG_MAP[k] for k in keyword_args if CELERY_ARG_MAP.get(k)
+    )
+
+    for key in CELERY_LS[:largest_index]:
+        if key not in keyword_args:
+            return True
+
+    return False
+
+
+def is_loose_crontab_call(call: ast.Call) -> Optional[ErrorLoc]:
+    """
+    require that a user pass all time increments that are smaller than the
+    highest one they specify.
+
+    e.g., user passes day_of_week, then they must pass hour and minute
+    """
+    if isinstance(call.func, ast.Name):
+        if call.func.id == "crontab":
+            if is_invalid_celery_crontab(kwargs=call.keywords):
+                return PIE784(lineno=call.lineno, col_offset=call.col_offset)
+
+    return None
+
+
+def is_celery_dict_task_definition(dict_: ast.Dict) -> bool:
+    """
+    determine whether the Dict is a Celery task definition
+    """
+    celery_task_dict_target_keys = {"task", "schedule"}
+
+    # We are looking for the `task` and `schedule` keys that all celery tasks
+    # configured via a Dict have
+    if len(dict_.keys) >= 2:
+        for key in dict_.keys:
+            if isinstance(key, ast.Str):
+                if key.s in celery_task_dict_target_keys:
+                    celery_task_dict_target_keys.remove(key.s)
+                if not celery_task_dict_target_keys:
+                    return True
+
+    return len(celery_task_dict_target_keys) == 0
+
+
+CELERY_OPTIONS_KEY = "options"
+CELERY_EXPIRES_KEY = "expires"
+
+
+def is_celery_task_missing_expires(dict_: ast.Dict) -> Optional[ErrorLoc]:
+    """
+    ensure that celery tasks have an `expires` arg
+    """
+    if is_celery_dict_task_definition(dict_):
+        for key, value in zip(dict_.keys, dict_.values):
+            if isinstance(key, ast.Str) and key.s == CELERY_OPTIONS_KEY:
+                # check that options value, a dict, has `expires` key
+                if isinstance(value, ast.Dict):
+                    for k in value.keys:
+                        if isinstance(k, ast.Str) and k.s == CELERY_EXPIRES_KEY:
+                            return None
+
+                    return PIE785(lineno=value.lineno, col_offset=value.col_offset)
+        return PIE785(lineno=dict_.lineno, col_offset=dict_.col_offset)
+
+    return None
+
+
+CELERY_APPLY_ASYNC = "apply_async"
+
+
+def is_celery_apply_async_missing_expires(node: ast.Call) -> Optional[ErrorLoc]:
+    """
+    ensure foo.apply_async() is given an expiration
+    """
+    if isinstance(node.func, ast.Attribute) and node.func.attr == CELERY_APPLY_ASYNC:
+        for k in node.keywords:
+            if k.arg == CELERY_EXPIRES_KEY:
+                return None
+        return PIE785(lineno=node.lineno, col_offset=node.col_offset)
+
+    return None
+
+
 class Flake8PieCheck:
     name = "flake8-pie"
     version = "0.3.0"
@@ -139,5 +253,17 @@ PIE782 = partial(
 PIE783 = partial(
     ErrorLoc,
     message="PIE783: Celery tasks should have explicit names.",
+    type=Flake8PieCheck,
+)
+
+PIE784 = partial(
+    ErrorLoc,
+    message="PIE784: Celery crontab is missing explicit arguments.",
+    type=Flake8PieCheck,
+)
+
+PIE785 = partial(
+    ErrorLoc,
+    message="PIE785: Celery tasks should have expirations.",
     type=Flake8PieCheck,
 )
