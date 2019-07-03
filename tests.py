@@ -106,6 +106,8 @@ def test_is_assign_and_return(
 
     node = ast.parse(func)
 
+    assert isinstance(node, ast.Module)
+
     func_def = node.body[0]
     assert isinstance(func_def, ast.FunctionDef)
     assert is_assign_and_return(func_def) == expected, reason
@@ -134,6 +136,8 @@ def test_no_pointless_f_strings(
     func: str, expected: Optional[ErrorLoc], reason: str
 ) -> None:
     node = ast.parse(func)
+
+    assert isinstance(node, ast.Module)
 
     expected_errors = [expected] if expected else []
     assert list(Flake8PieCheck(node).run()) == expected_errors, reason
@@ -226,7 +230,7 @@ def foo():
 )
 def test_celery_task_name_lint(code: str, expected: Optional[ErrorLoc]) -> None:
     node = ast.parse(code)
-
+    assert isinstance(node, ast.Module)
     expected_errors = [expected] if expected else []
     assert list(Flake8PieCheck(node).run()) == expected_errors, "missing name property"
 
@@ -284,7 +288,7 @@ def test_celery_crontab_named_args(code: str, expected: Optional[ErrorLoc]) -> N
     params:  minute, hour, day_of_week, day_of_month, month_of_year
     """
     node = ast.parse(code)
-
+    assert isinstance(node, ast.Module)
     expected_errors = [expected] if expected else []
     assert (
         list(Flake8PieCheck(node).run()) == expected_errors
@@ -356,7 +360,7 @@ def test_celery_require_task_expiration(
     code: str, expected: Optional[ErrorLoc]
 ) -> None:
     node = ast.parse(code)
-
+    assert isinstance(node, ast.Module)
     expected_errors = [expected] if expected else []
     assert list(Flake8PieCheck(node).run()) == expected_errors, "missing expiration"
 
@@ -427,5 +431,10 @@ def test_invalid_celery_crontab_kwargs(args: typing.List[str], expected: bool) -
     ],
 )
 def test_is_celery_dict_task_definition(dict_: str, expected: bool) -> None:
-    actual_dict = ast.parse(dict_).body[0].value
+    module = ast.parse(dict_)
+    assert isinstance(module, ast.Module)
+    expr = module.body[0]
+    assert isinstance(expr, ast.Expr)
+    actual_dict = expr.value
+    assert isinstance(actual_dict, ast.Dict)
     assert is_celery_dict_task_definition(actual_dict) == expected
