@@ -226,6 +226,22 @@ def foo():
 """,
             None,
         ),
+        (
+            """
+@shared_task
+def foo():
+    pass
+""",
+            PIE783(lineno=2, col_offset=1),
+        ),
+        (
+            """
+@app.task
+def bar():
+    pass
+""",
+            PIE783(lineno=2, col_offset=1),
+        ),
     ],
 )
 def test_celery_task_name_lint(code: str, expected: Optional[ErrorLoc]) -> None:
