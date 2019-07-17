@@ -11,6 +11,7 @@ Note: flake8-pie requires Python 3.6 or greater
 - PIE783: Celery tasks should have explicit names.
 - PIE784: Celery crontab is missing explicit arguments.
 - PIE785: Celery tasks should have expirations.
+- PIE786: Django models should specify a default ordering.
 
 ### PIE781: Assign and Return
 
@@ -98,6 +99,28 @@ This enforces specifying expirations in both the celery beat config dict and
 in `.apply_async()` calls.
 
 The same caveat applies about how this lint is naive.
+
+### PIE786: Django models should specify a default ordering.
+
+We generally want to specify a default ordering for models to ensure our queries
+behave as expected.
+
+#### examples
+
+```python
+# error
+class Book(models.Models):
+    title = models.CharField(max_length=255)
+    author = models.CharField(max_length=255)
+
+# ok
+class Book(models.Models):
+    title = models.CharField(max_length=255)
+    author = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ["-created"]
+```
 
 ## dev
 
