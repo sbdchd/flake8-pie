@@ -36,19 +36,6 @@ def foo():
    return x
 ```
 
-### PIE782: No Pointless F Strings
-
-Warn about usage of f-string without templated values.
-
-#### examples
-
-```python
-x = (
-    f"foo {y}", # ok
-    f"bar" # error
-)
-```
-
 ### PIE783: Celery tasks should have explicit names.
 
 Warn about [Celery](https://pypi.org/project/celery/) task definitions that don't have explicit names.

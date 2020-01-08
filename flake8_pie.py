@@ -50,22 +50,8 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
-        error = is_pointless_f_string(node)
-        if error:
-            self.errors.append(error)
-
-        self.generic_visit(node)
-
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}: errors={self.errors}>"
-
-
-def is_pointless_f_string(node: ast.JoinedStr) -> Optional[ErrorLoc]:
-    for value in node.values:
-        if isinstance(value, ast.FormattedValue):
-            return None
-    return PIE782(lineno=node.lineno, col_offset=node.col_offset)
 
 
 def get_assign_target_id(stmt: ast.stmt) -> Optional[str]:
@@ -259,13 +245,6 @@ class Flake8PieCheck:
 PIE781 = partial(
     ErrorLoc,
     message="PIE781: You are assigning to a variable and then returning. Instead remove the assignment and return.",
-    type=Flake8PieCheck,
-)
-
-
-PIE782 = partial(
-    ErrorLoc,
-    message="PIE782: Unnecessary f-string. You can safely remove the `f` prefix.",
     type=Flake8PieCheck,
 )
 
