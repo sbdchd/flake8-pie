@@ -17,7 +17,7 @@ classifiers=[
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6.1"
+python = ">=3.6"
 
 [tool.poetry.dev-dependencies]
 black = "^18.3-alpha.0"
@@ -29,7 +29,6 @@ twine = "^1.12"
 pytest-watch = "^4.2"
 pytest = "^4.0"
 ipython = "^7.2"
-astpretty = "^2.0"
 
 [tool.poetry.plugins]
 [tool.poetry.plugins."flake8.extension"]
