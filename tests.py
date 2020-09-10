@@ -8,6 +8,7 @@ from flake8_pie import (
     PIE781,
     PIE783,
     PIE784,
+    PIE786,
     PIE785,
     ErrorLoc,
     is_assign_and_return,
@@ -439,3 +440,90 @@ def test_is_celery_dict_task_definition(dict_: str, expected: bool) -> None:
     actual_dict = expr.value
     assert isinstance(actual_dict, ast.Dict)
     assert is_celery_dict_task_definition(actual_dict) == expected
+
+
+@pytest.mark.parametrize(
+    "try_statement,error",
+    [
+        (
+            """
+try:
+    print("Hello")
+except ValueError:
+    pass
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, TypeError):
+    pass
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except:
+    pass
+""",
+            PIE786(lineno=4, col_offset=0),
+        ),
+        (
+            """
+try:
+    print("Hello")
+except BaseException:
+    pass
+""",
+            PIE786(lineno=4, col_offset=0),
+        ),
+        (
+            """
+try:
+    print("Hello")
+except Exception:
+    pass
+""",
+            PIE786(lineno=4, col_offset=0),
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, Exception):
+    pass
+""",
+            PIE786(lineno=4, col_offset=20),
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    pass
+""",
+            PIE786(lineno=4, col_offset=20),
+        ),
+        (
+            """
+class UserViewSet(viewsets.ModelViewSet):
+    def create(self, request: Request) -> Response:
+        try:
+            user = serializer.save()
+        except Exception:
+            return Response()
+""",
+            PIE786(lineno=6, col_offset=8),
+        ),
+    ],
+)
+def test_broad_except(try_statement: str, error: Optional[PIE786]) -> None:
+    expr = ast.parse(try_statement)
+    if error is None:
+        assert list(Flake8PieCheck(expr).run()) == []
+    else:
+        assert list(Flake8PieCheck(expr).run()) == [error]
