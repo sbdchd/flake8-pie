@@ -19,7 +19,7 @@ jobs:
             # Use our new PATH so we can call poetry from bash
             source $BASH_ENV
             # Install with `--user` because we don't own root
-            python3 -m pip install --user poetry===0.11.5
+            python3 -m pip install --user poetry===0.12.11
             # Install our dev dependencies
             poetry install
       - save_cache:
@@ -56,7 +56,7 @@ jobs:
             # Use our new PATH so we can call poetry from bash
             source $BASH_ENV
             # Install with `--user` because we don't own root
-            python3 -m pip install --user poetry===0.11.5
+            python3 -m pip install --user poetry===0.12.11
             # Install our dev dependencies
             poetry install
       - save_cache:
