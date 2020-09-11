@@ -85,6 +85,46 @@ in `.apply_async()` calls.
 
 The same caveat applies about how this lint is naive.
 
+### PIE786: Use precise exception handlers
+
+Be precise in what exceptions you catch. Bare `except:` handlers, catching `BaseException`, or catching `Exception` can lead to unexpected bugs.
+
+#### examples
+
+```python
+# error
+try:
+    save_file(name="export.csv")
+except:
+    pass
+
+# error
+try:
+    save_file(name="export.csv")
+except BaseException:
+    pass
+
+# error
+try:
+    save_file(name="export.csv")
+except Exception:
+    pass
+
+# error
+try:
+    save_file(name="export.csv")
+except (ValueError, Exception):
+    pass
+
+
+# ok
+try:
+    save_file(name="export.csv")
+except OSError:
+    pass
+```
+
+
 ## dev
 
 ```shell

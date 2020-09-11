@@ -50,6 +50,13 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
         self.generic_visit(node)
 
+    def visit_Try(self, node: ast.Try) -> None:
+        error = is_broad_except(node)
+        if error:
+            self.errors.append(error)
+
+        self.generic_visit(node)
+
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}: errors={self.errors}>"
 
@@ -227,9 +234,37 @@ def is_celery_apply_async_missing_expires(node: ast.Call) -> Optional[ErrorLoc]:
     return None
 
 
+BAD_EXCEPT_IDS = {"BaseException", "Exception"}
+
+
+def is_bad_except_type(except_type: Optional[ast.Name]) -> bool:
+    return except_type is None or except_type.id in BAD_EXCEPT_IDS
+
+
+def is_broad_except(node: ast.Try) -> Optional[ErrorLoc]:
+    """
+    ensure try...except is not called with Exception, BaseException, or no argument
+    """
+    for node_handler in node.handlers:
+        if isinstance(node_handler.type, ast.Tuple):
+            for elt in node_handler.type.elts:
+                if (isinstance(elt, ast.Name) or elt is None) and is_bad_except_type(
+                    elt
+                ):
+                    return PIE786(lineno=elt.lineno, col_offset=elt.col_offset)
+            continue
+        if (
+            isinstance(node_handler.type, ast.Name) or node_handler.type is None
+        ) and is_bad_except_type(node_handler.type):
+            return PIE786(
+                lineno=node_handler.lineno, col_offset=node_handler.col_offset
+            )
+    return None
+
+
 class Flake8PieCheck:
     name = "flake8-pie"
-    version = "0.4.2"
+    version = "0.6.0"
 
     def __init__(self, tree: ast.Module) -> None:
         self.tree = tree
@@ -264,4 +299,7 @@ PIE785 = partial(
     ErrorLoc,
     message="PIE785: Celery tasks should have expirations.",
     type=Flake8PieCheck,
+)
+PIE786 = partial(
+    ErrorLoc, message="PIE786: Use precise exception handlers.", type=Flake8PieCheck
 )
