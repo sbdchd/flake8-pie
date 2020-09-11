@@ -264,7 +264,7 @@ def is_broad_except(node: ast.Try) -> Optional[ErrorLoc]:
 
 class Flake8PieCheck:
     name = "flake8-pie"
-    version = "0.4.2"
+    version = "0.6.0"
 
     def __init__(self, tree: ast.Module) -> None:
         self.tree = tree
