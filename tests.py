@@ -1,5 +1,5 @@
 import ast
-from typing import Optional
+from typing import Optional, Any
 import typing
 
 import pytest
@@ -521,7 +521,7 @@ class UserViewSet(viewsets.ModelViewSet):
         ),
     ],
 )
-def test_broad_except(try_statement: str, error: Optional[PIE786]) -> None:
+def test_broad_except(try_statement: str, error: Any) -> None:
     expr = ast.parse(try_statement)
     if error is None:
         assert list(Flake8PieCheck(expr).run()) == []
