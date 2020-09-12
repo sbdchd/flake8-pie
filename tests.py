@@ -468,6 +468,44 @@ except (ValueError, TypeError):
 try:
     print("Hello")
 except:
+    raise
+""",
+            None
+        ),
+        (
+            """
+try:
+    print("Hello")
+except Exception:
+    raise
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    print("hello world")
+    raise
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    if x != 123:
+        raise
+""",
+            PIE786(lineno=4, col_offset=20),
+        ),
+        (
+            """
+try:
+    print("Hello")
+except:
     pass
 """,
             PIE786(lineno=4, col_offset=0),

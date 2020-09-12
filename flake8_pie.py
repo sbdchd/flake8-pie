@@ -247,17 +247,13 @@ def is_broad_except(node: ast.ExceptHandler) -> Optional[ErrorLoc]:
     """
     if isinstance(node.type, ast.Tuple):
         for elt in node.type.elts:
-            if (isinstance(elt, ast.Name) or elt is None) and is_bad_except_type(
-                elt
-            ):
+            if (isinstance(elt, ast.Name) or elt is None) and is_bad_except_type(elt):
                 return PIE786(lineno=elt.lineno, col_offset=elt.col_offset)
         return None
-    if (
-        isinstance(node.type, ast.Name) or node.type is None
-    ) and is_bad_except_type(node.type):
-        return PIE786(
-            lineno=node.lineno, col_offset=node.col_offset
-        )
+    if (isinstance(node.type, ast.Name) or node.type is None) and is_bad_except_type(
+        node.type
+    ):
+        return PIE786(lineno=node.lineno, col_offset=node.col_offset)
     return None
 
 
