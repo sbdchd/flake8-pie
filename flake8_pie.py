@@ -50,7 +50,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_Try(self, node: ast.Try) -> None:
+    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
         error = is_broad_except(node)
         if error:
             self.errors.append(error)
@@ -241,24 +241,19 @@ def is_bad_except_type(except_type: Optional[ast.Name]) -> bool:
     return except_type is None or except_type.id in BAD_EXCEPT_IDS
 
 
-def is_broad_except(node: ast.Try) -> Optional[ErrorLoc]:
+def is_broad_except(node: ast.ExceptHandler) -> Optional[ErrorLoc]:
     """
     ensure try...except is not called with Exception, BaseException, or no argument
     """
-    for node_handler in node.handlers:
-        if isinstance(node_handler.type, ast.Tuple):
-            for elt in node_handler.type.elts:
-                if (isinstance(elt, ast.Name) or elt is None) and is_bad_except_type(
-                    elt
-                ):
-                    return PIE786(lineno=elt.lineno, col_offset=elt.col_offset)
-            continue
-        if (
-            isinstance(node_handler.type, ast.Name) or node_handler.type is None
-        ) and is_bad_except_type(node_handler.type):
-            return PIE786(
-                lineno=node_handler.lineno, col_offset=node_handler.col_offset
-            )
+    if isinstance(node.type, ast.Tuple):
+        for elt in node.type.elts:
+            if (isinstance(elt, ast.Name) or elt is None) and is_bad_except_type(elt):
+                return PIE786(lineno=elt.lineno, col_offset=elt.col_offset)
+        return None
+    if (isinstance(node.type, ast.Name) or node.type is None) and is_bad_except_type(
+        node.type
+    ):
+        return PIE786(lineno=node.lineno, col_offset=node.col_offset)
     return None
 
 
