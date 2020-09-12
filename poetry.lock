@@ -3,28 +3,23 @@ category = "dev"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 name = "appdirs"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.4.3"
 
 [[package]]
 category = "dev"
 description = "Disable App Nap on OS X 10.9"
+marker = "sys_platform == \"darwin\""
 name = "appnope"
 optional = false
-platform = "UNKNOWN"
 python-versions = "*"
 version = "0.1.0"
-
-[package.requirements]
-platform = "darwin"
 
 [[package]]
 category = "dev"
 description = "An unobtrusive argparse wrapper with natural syntax"
 name = "argh"
 optional = false
-platform = "UNKNOWN"
 python-versions = "*"
 version = "0.26.2"
 
@@ -33,7 +28,6 @@ category = "dev"
 description = "Atomic file writes."
 name = "atomicwrites"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.2.1"
 
@@ -42,7 +36,6 @@ category = "dev"
 description = "Classes Without Boilerplate"
 name = "attrs"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "18.2.0"
 
@@ -51,7 +44,6 @@ category = "dev"
 description = "Specifications for callback functions passed in to an API"
 name = "backcall"
 optional = false
-platform = "UNKNOWN"
 python-versions = "*"
 version = "0.1.0"
 
@@ -60,7 +52,6 @@ category = "dev"
 description = "The uncompromising code formatter."
 name = "black"
 optional = false
-platform = "*"
 python-versions = ">=3.6"
 version = "18.9b0"
 
@@ -75,7 +66,6 @@ category = "dev"
 description = "An easy safelist-based HTML-sanitizing tool."
 name = "bleach"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "3.0.2"
 
@@ -88,7 +78,6 @@ category = "dev"
 description = "Python package for providing Mozilla's CA Bundle."
 name = "certifi"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "2018.11.29"
 
@@ -97,7 +86,6 @@ category = "dev"
 description = "Universal encoding detector for Python 2 and 3"
 name = "chardet"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "3.0.4"
 
@@ -106,7 +94,6 @@ category = "dev"
 description = "Composable command line interface toolkit"
 name = "click"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "7.0"
 
@@ -115,7 +102,6 @@ category = "dev"
 description = "Cross-platform colored terminal text."
 name = "colorama"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "0.4.1"
 
@@ -124,7 +110,6 @@ category = "dev"
 description = "Better living through Python with decorators"
 name = "decorator"
 optional = false
-platform = "All"
 python-versions = "*"
 version = "4.3.0"
 
@@ -133,7 +118,6 @@ category = "dev"
 description = "Pythonic argument parser, that will make you smile"
 name = "docopt"
 optional = false
-platform = "UNKNOWN"
 python-versions = "*"
 version = "0.6.2"
 
@@ -142,7 +126,6 @@ category = "dev"
 description = "Docutils -- Python Documentation Utilities"
 name = "docutils"
 optional = false
-platform = "OS-independent"
 python-versions = "*"
 version = "0.14"
 
@@ -151,7 +134,6 @@ category = "dev"
 description = "the modular source code checker: pep8, pyflakes and co"
 name = "flake8"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "3.6.0"
 
@@ -166,7 +148,6 @@ category = "dev"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.8"
 
@@ -175,38 +156,27 @@ category = "dev"
 description = "IPython: Productive Interactive Computing"
 name = "ipython"
 optional = false
-platform = "Linux"
 python-versions = ">=3.5"
 version = "7.2.0"
 
 [package.dependencies]
+appnope = "*"
 backcall = "*"
+colorama = "*"
 decorator = "*"
 jedi = ">=0.10"
+pexpect = "*"
 pickleshare = "*"
 prompt-toolkit = ">=2.0.0,<2.1.0"
 pygments = "*"
 setuptools = ">=18.5"
 traitlets = ">=4.2"
 
-[package.dependencies.appnope]
-platform = "darwin"
-version = "*"
-
-[package.dependencies.colorama]
-platform = "win32"
-version = "*"
-
-[package.dependencies.pexpect]
-platform = "!=win32"
-version = "*"
-
 [[package]]
 category = "dev"
 description = "Vestigial utilities from IPython"
 name = "ipython-genutils"
 optional = false
-platform = "Linux"
 python-versions = "*"
 version = "0.2.0"
 
@@ -215,7 +185,6 @@ category = "dev"
 description = "An autocompletion tool for Python that can be used for text editors."
 name = "jedi"
 optional = false
-platform = "any"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "0.13.2"
 
@@ -227,7 +196,6 @@ category = "dev"
 description = "McCabe checker, plugin for flake8"
 name = "mccabe"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.6.1"
 
@@ -236,7 +204,6 @@ category = "dev"
 description = "More routines for operating on iterables, beyond itertools"
 name = "more-itertools"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "4.3.0"
 
@@ -248,7 +215,6 @@ category = "dev"
 description = "Optional static typing for Python"
 name = "mypy"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.650"
 
@@ -261,7 +227,6 @@ category = "dev"
 description = "Experimental type system extensions for programs checked with the mypy typechecker."
 name = "mypy-extensions"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.4.1"
 
@@ -270,7 +235,6 @@ category = "dev"
 description = "A Python Parser"
 name = "parso"
 optional = false
-platform = "any"
 python-versions = "*"
 version = "0.3.1"
 
@@ -279,31 +243,26 @@ category = "dev"
 description = "File system general utilities"
 name = "pathtools"
 optional = false
-platform = "UNKNOWN"
 python-versions = "*"
 version = "0.1.2"
 
 [[package]]
 category = "dev"
 description = "Pexpect allows easy control of interactive console applications."
+marker = "sys_platform != \"win32\""
 name = "pexpect"
 optional = false
-platform = "UNIX"
 python-versions = "*"
 version = "4.6.0"
 
 [package.dependencies]
 ptyprocess = ">=0.5"
 
-[package.requirements]
-platform = "!=win32"
-
 [[package]]
 category = "dev"
 description = "Tiny 'shelve'-like database with concurrency support"
 name = "pickleshare"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.7.5"
 
@@ -312,7 +271,6 @@ category = "dev"
 description = "Query metadatdata from sdists / bdists / installed packages."
 name = "pkginfo"
 optional = false
-platform = "Unix"
 python-versions = "*"
 version = "1.4.2"
 
@@ -321,7 +279,6 @@ category = "dev"
 description = "plugin and hook calling mechanisms for python"
 name = "pluggy"
 optional = false
-platform = "unix"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "0.8.0"
 
@@ -330,7 +287,6 @@ category = "dev"
 description = "Library for building powerful interactive command lines in Python"
 name = "prompt-toolkit"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "2.0.7"
 
@@ -341,21 +297,17 @@ wcwidth = "*"
 [[package]]
 category = "dev"
 description = "Run a subprocess in a pseudo terminal"
+marker = "sys_platform != \"win32\""
 name = "ptyprocess"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.6.0"
-
-[package.requirements]
-platform = "!=win32"
 
 [[package]]
 category = "dev"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
 name = "py"
 optional = false
-platform = "unix"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.7.0"
 
@@ -364,7 +316,6 @@ category = "dev"
 description = "Python style guide checker"
 name = "pycodestyle"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "2.4.0"
 
@@ -373,7 +324,6 @@ category = "dev"
 description = "passive checker of Python programs"
 name = "pyflakes"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.0.0"
 
@@ -382,7 +332,6 @@ category = "dev"
 description = "Pygments is a syntax highlighting package written in Python."
 name = "pygments"
 optional = false
-platform = "any"
 python-versions = "*"
 version = "2.3.1"
 
@@ -391,29 +340,24 @@ category = "dev"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
-platform = "unix"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "4.0.2"
 
 [package.dependencies]
 atomicwrites = ">=1.0"
 attrs = ">=17.4.0"
+colorama = "*"
 more-itertools = ">=4.0.0"
 pluggy = ">=0.7"
 py = ">=1.5.0"
 setuptools = "*"
 six = ">=1.10.0"
 
-[package.dependencies.colorama]
-platform = "win32"
-version = "*"
-
 [[package]]
 category = "dev"
 description = "Local continuous test runner with pytest and watchdog."
 name = "pytest-watch"
 optional = false
-platform = "any"
 python-versions = "*"
 version = "4.2.0"
 
@@ -428,7 +372,6 @@ category = "dev"
 description = "YAML parser and emitter for Python"
 name = "pyyaml"
 optional = false
-platform = "Any"
 python-versions = "*"
 version = "3.13"
 
@@ -437,7 +380,6 @@ category = "dev"
 description = "readme_renderer is a library for rendering \"readme\" descriptions for Warehouse"
 name = "readme-renderer"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "24.0"
 
@@ -452,22 +394,20 @@ category = "dev"
 description = "Python HTTP for Humans."
 name = "requests"
 optional = false
-platform = "*"
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "2.21.0"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "2.24.0"
 
 [package.dependencies]
 certifi = ">=2017.4.17"
-chardet = ">=3.0.2,<3.1.0"
-idna = ">=2.5,<2.9"
-urllib3 = ">=1.21.1,<1.25"
+chardet = ">=3.0.2,<4"
+idna = ">=2.5,<3"
+urllib3 = ">=1.21.1,<1.25.0 || >1.25.0,<1.25.1 || >1.25.1,<1.26"
 
 [[package]]
 category = "dev"
 description = "A utility belt for advanced users of python-requests"
 name = "requests-toolbelt"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.8.0"
 
@@ -479,7 +419,6 @@ category = "dev"
 description = "Python 2 and 3 compatibility utilities"
 name = "six"
 optional = false
-platform = "*"
 python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 version = "1.12.0"
 
@@ -488,7 +427,6 @@ category = "dev"
 description = "Python Library for Tom's Obvious, Minimal Language"
 name = "toml"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.10.0"
 
@@ -497,7 +435,6 @@ category = "dev"
 description = "Fast, Extensible Progress Meter"
 name = "tqdm"
 optional = false
-platform = "any"
 python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 version = "4.28.1"
 
@@ -506,7 +443,6 @@ category = "dev"
 description = "Traitlets Python config system"
 name = "traitlets"
 optional = false
-platform = "Linux,Mac OS X,Windows"
 python-versions = "*"
 version = "4.3.2"
 
@@ -520,7 +456,6 @@ category = "dev"
 description = "Collection of utilities for publishing packages on PyPI"
 name = "twine"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.12.1"
 
@@ -537,7 +472,6 @@ category = "dev"
 description = "a fork of Python 2 and 3 ast modules with type comment support"
 name = "typed-ast"
 optional = false
-platform = "POSIX"
 python-versions = "*"
 version = "1.1.0"
 
@@ -546,16 +480,14 @@ category = "dev"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 name = "urllib3"
 optional = false
-platform = "*"
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
-version = "1.24.1"
+python-versions = "*"
+version = "1.22"
 
 [[package]]
 category = "dev"
 description = "Filesystem events monitoring"
 name = "watchdog"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.9.0"
 
@@ -569,7 +501,6 @@ category = "dev"
 description = "Measures number of Terminal column cells of wide-character codes"
 name = "wcwidth"
 optional = false
-platform = "UNKNOWN"
 python-versions = "*"
 version = "0.1.7"
 
@@ -578,7 +509,6 @@ category = "dev"
 description = "Character encoding aliases for legacy web content"
 name = "webencodings"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.5.1"
 
@@ -587,13 +517,11 @@ category = "dev"
 description = "A built-package format for Python."
 name = "wheel"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "0.32.3"
 
 [metadata]
-content-hash = "ce6210a385cce6ccff7776c6926686cfb5aaddedb079d2929ec622cb195cdc62"
-platform = "*"
+content-hash = "91247d5ea0feffa831157b9363d5305b4d640a89f03ac1c6b4aaea90cd049623"
 python-versions = ">=3.6"
 
 [metadata.hashes]
@@ -637,17 +565,16 @@ pytest = ["f689bf2fc18c4585403348dd56f47d87780bf217c53ed9ae7a3e2d7faa45f8e9", "f
 pytest-watch = ["06136f03d5b361718b8d0d234042f7b2f203910d8568f63df2f866b547b3d4b9"]
 pyyaml = ["3d7da3009c0f3e783b2c873687652d83b1bbfd5c88e9813fb7e5b03c0dd3108b", "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf", "40c71b8e076d0550b2e6380bada1f1cd1017b882f7e16f09a65be98e017f211a", "558dd60b890ba8fd982e05941927a3911dc409a63dcb8b634feaa0cda69330d3", "a7c28b45d9f99102fa092bb213aa12e0aaf9a6a1f5e395d36166639c1f96c3a1", "aa7dd4a6a427aed7df6fb7f08a580d68d9b118d90310374716ae90b710280af1", "bc558586e6045763782014934bfaf39d48b8ae85a2713117d16c39864085c613", "d46d7982b62e0729ad0175a9bc7e10a566fc07b224d2c79fafb5e032727eaa04", "d5eef459e30b09f5a098b9cea68bebfeb268697f78d647bd255a085371ac7f3f", "e01d3203230e1786cd91ccfdc8f8454c8069c91bee3962ad93b87a4b2860f537", "e170a9e6fcfd19021dd29845af83bb79236068bf5fd4df3327c1be18182b2531"]
 readme-renderer = ["bb16f55b259f27f75f640acf5e00cf897845a8b3e4731b5c1a436e4b8529202f", "c8532b79afc0375a85f10433eca157d6b50f7d6990f337fa498c96cd4bfc203d"]
-requests = ["502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e", "7bf2a778576d825600030a110f3c0e3e8edc51dfaafe1c146e39a2027784957b"]
+requests = ["b3559a131db72c33ee969480840fff4bb6dd111de7dd27c8ee1f820f4f00231b", "fe75cc94a9443b9246fc7049224f75604b113c36acb93f87b80ed42c44cbb898"]
 requests-toolbelt = ["42c9c170abc2cacb78b8ab23ac957945c7716249206f90874651971a4acff237", "f6a531936c6fa4c6cfce1b9c10d5c4f498d16528d2a54a22ca00011205a187b5"]
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]
 toml = ["229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c", "235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e", "f1db651f9657708513243e61e6cc67d101a39bad662eaa9b5546f789338e07a3"]
 tqdm = ["3c4d4a5a41ef162dd61f1edb86b0e1c7859054ab656b2e7c7b77e7fbf6d9f392", "5b4d5549984503050883bc126280b386f5f4ca87e6c023c5d015655ad75bdebb"]
 traitlets = ["9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835", "c6cb5e6f57c5a9bdaa40fa71ce7b4af30298fbab9ece9815b5d995ab6217c7d9"]
 twine = ["7d89bc6acafb31d124e6e5b295ef26ac77030bf098960c2a4c4e058335827c5c", "fad6f1251195f7ddd1460cb76d6ea106c93adb4e56c41e0da79658e56e547d2c"]
-typed-ast = ["0948004fa228ae071054f5208840a1e88747a357ec1101c17217bfe99b299d58", "25d8feefe27eb0303b73545416b13d108c6067b846b543738a25ff304824ed9a", "29464a177d56e4e055b5f7b629935af7f49c196be47528cc94e0a7bf83fbc2b9", "2e214b72168ea0275efd6c884b114ab42e316de3ffa125b267e732ed2abda892", "3e0d5e48e3a23e9a4d1a9f698e32a542a4a288c871d33ed8df1b092a40f3a0f9", "519425deca5c2b2bdac49f77b2c5625781abbaf9a809d727d3a5596b30bb4ded", "57fe287f0cdd9ceaf69e7b71a2e94a24b5d268b35df251a88fef5cc241bf73aa", "668d0cec391d9aed1c6a388b0d5b97cd22e6073eaa5fbaa6d2946603b4871efe", "68ba70684990f59497680ff90d18e756a47bf4863c604098f10de9716b2c0bdd", "6de012d2b166fe7a4cdf505eee3aaa12192f7ba365beeefaca4ec10e31241a85", "79b91ebe5a28d349b6d0d323023350133e927b4de5b651a8aa2db69c761420c6", "8550177fa5d4c1f09b5e5f524411c44633c80ec69b24e0e98906dd761941ca46", "a8034021801bc0440f2e027c354b4eafd95891b573e12ff0418dec385c76785c", "bc978ac17468fe868ee589c795d06777f75496b1ed576d308002c8a5756fb9ea", "c05b41bc1deade9f90ddc5d988fe506208019ebba9f2578c622516fd201f5863", "c9b060bd1e5a26ab6e8267fd46fc9e02b54eb15fffb16d112d4c7b1c12987559", "edb04bdd45bfd76c8292c4d9654568efaedf76fe78eb246dde69bdb13b2dad87", "f19f2a4f547505fe9072e15f6f4ae714af51b5a681a97f187971f50c283193b6"]
-urllib3 = ["61bf29cada3fc2fbefad4fdf059ea4bd1b4a86d2b6d15e1c7c0b582b9752fe39", "de9529817c93f27c8ccbfead6985011db27bd0ddfcdb2d86f3f663385c6a9c22"]
+typed-ast = ["0948004fa228ae071054f5208840a1e88747a357ec1101c17217bfe99b299d58", "10703d3cec8dcd9eef5a630a04056bbc898abc19bac5691612acba7d1325b66d", "1f6c4bd0bdc0f14246fd41262df7dfc018d65bb05f6e16390b7ea26ca454a291", "25d8feefe27eb0303b73545416b13d108c6067b846b543738a25ff304824ed9a", "29464a177d56e4e055b5f7b629935af7f49c196be47528cc94e0a7bf83fbc2b9", "2e214b72168ea0275efd6c884b114ab42e316de3ffa125b267e732ed2abda892", "3e0d5e48e3a23e9a4d1a9f698e32a542a4a288c871d33ed8df1b092a40f3a0f9", "519425deca5c2b2bdac49f77b2c5625781abbaf9a809d727d3a5596b30bb4ded", "57fe287f0cdd9ceaf69e7b71a2e94a24b5d268b35df251a88fef5cc241bf73aa", "668d0cec391d9aed1c6a388b0d5b97cd22e6073eaa5fbaa6d2946603b4871efe", "68ba70684990f59497680ff90d18e756a47bf4863c604098f10de9716b2c0bdd", "6de012d2b166fe7a4cdf505eee3aaa12192f7ba365beeefaca4ec10e31241a85", "79b91ebe5a28d349b6d0d323023350133e927b4de5b651a8aa2db69c761420c6", "8550177fa5d4c1f09b5e5f524411c44633c80ec69b24e0e98906dd761941ca46", "898f818399cafcdb93cbbe15fc83a33d05f18e29fb498ddc09b0214cdfc7cd51", "94b091dc0f19291adcb279a108f5d38de2430411068b219f41b343c03b28fb1f", "a26863198902cda15ab4503991e8cf1ca874219e0118cbf07c126bce7c4db129", "a8034021801bc0440f2e027c354b4eafd95891b573e12ff0418dec385c76785c", "bc978ac17468fe868ee589c795d06777f75496b1ed576d308002c8a5756fb9ea", "c05b41bc1deade9f90ddc5d988fe506208019ebba9f2578c622516fd201f5863", "c9b060bd1e5a26ab6e8267fd46fc9e02b54eb15fffb16d112d4c7b1c12987559", "edb04bdd45bfd76c8292c4d9654568efaedf76fe78eb246dde69bdb13b2dad87", "f19f2a4f547505fe9072e15f6f4ae714af51b5a681a97f187971f50c283193b6"]
+urllib3 = ["06330f386d6e4b195fbfc736b297f58c5a892e4440e54d294d7004e3a9bbea1b", "cc44da8e1145637334317feebd728bd869a35285b93cbb4cca2577da7e62db4f"]
 watchdog = ["965f658d0732de3188211932aeb0bb457587f04f63ab4c1e33eab878e9de961d"]
 wcwidth = ["3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e", "f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"]
 webencodings = ["a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78", "b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923"]
 wheel = ["029703bf514e16c8271c3821806a1c171220cc5bdd325cbf4e7da1e056a01db6", "1e53cdb3f808d5ccd0df57f964263752aa74ea7359526d3da6c02114ec1e1d44"]
-

@@ -19,7 +19,7 @@ from flake8_pie import (
     is_invalid_celery_crontab,
     is_celery_dict_task_definition,
 )
-from flake8_pie.pie786_precise_exception_handler import PIE786
+from flake8_pie.pie786_precise_exception_handler import PIE786, has_bad_control_flow
 
 
 func_test_cases = [
@@ -462,6 +462,56 @@ def test_is_celery_dict_task_definition(dict_: str, expected: bool) -> None:
             """
 try:
     print("Hello")
+except:
+    raise
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except Exception:
+    raise
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    print("hello world")
+    raise
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    if x != 123:
+        if y == 10:
+            print("hello")
+    raise
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    if x != 123:
+        raise
+""",
+            PIE786(lineno=4, col_offset=20),
+        ),
+        (
+            """
+try:
+    print("Hello")
 except ValueError:
     pass
 """,
@@ -532,6 +582,64 @@ class UserViewSet(viewsets.ModelViewSet):
 """,
             PIE786(lineno=6, col_offset=8),
         ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    if x != 123:
+        return
+    raise
+""",
+            PIE786(lineno=4, col_offset=20),
+        ),
+        (
+            """
+for x in my_results:
+    try:
+        print("Hello")
+    except (ValueError, BaseException):
+        if x != 123:
+            if y == 10:
+                continue
+        raise
+""",
+            PIE786(lineno=5, col_offset=24),
+        ),
+        (
+            """
+for x in my_results:
+    try:
+        print("Hello")
+    except (ValueError, BaseException):
+        if x != 123:
+            break
+        raise
+""",
+            PIE786(lineno=5, col_offset=24),
+        ),
+        (
+            """
+for x in my_results:
+    try:
+        print("Hello")
+    except (ValueError, BaseException):
+        break
+        raise
+""",
+            PIE786(lineno=5, col_offset=24),
+        ),
+        (
+            """
+for x in my_results:
+    try:
+        print("Hello")
+    except (ValueError, BaseException):
+        return
+        raise
+""",
+            PIE786(lineno=5, col_offset=24),
+        ),
     ],
 )
 def test_broad_except(try_statement: str, error: Any) -> None:
@@ -540,3 +648,29 @@ def test_broad_except(try_statement: str, error: Any) -> None:
         assert list(Flake8PieCheck786(expr).run()) == []
     else:
         assert list(Flake8PieCheck786(expr).run()) == [error]
+
+
+EXPRESSIONS = [
+    """
+if x != 123:
+    if y == 10:
+        continue
+raise
+    """,
+    """
+if x != 123:
+    return
+raise
+    """,
+    """
+if x != 123:
+    continue
+raise
+    """,
+]
+
+
+def test_has_bad_control_flow() -> None:
+    for expression in EXPRESSIONS:
+        expr = ast.parse(expression)
+        assert has_bad_control_flow(expr.body) is True
