@@ -22,6 +22,13 @@ def is_bad_except_type(except_type: Optional[ast.Name]) -> bool:
 
 
 def has_bad_control_flow(nodes: List[ast.stmt]) -> bool:
+    """
+    Check if `return`, `break` or `continue` exists in node tree.
+
+    We allow broad exceptions when `raise` is in the except handler body, unless
+    `raise` is not always called, like when there is a return, break, or
+    continue in the handler body.
+    """
     for node in nodes:
         if isinstance(node, (ast.Continue, ast.Break, ast.Return)):
             return True
