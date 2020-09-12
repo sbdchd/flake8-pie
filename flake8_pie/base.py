@@ -27,7 +27,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
 class Flake8PieCheck:
     name = "flake8-pie"
-    version = "0.6.0"
+    version = "0.6.1"
 
     visitor: Type["Flake8PieVisitor"]
 
