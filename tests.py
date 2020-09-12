@@ -19,7 +19,7 @@ from flake8_pie import (
     is_invalid_celery_crontab,
     is_celery_dict_task_definition,
 )
-from flake8_pie.pie786_precise_exception_handler import PIE786
+from flake8_pie.pie786_precise_exception_handler import PIE786, has_bad_control_flow
 
 
 func_test_cases = [
@@ -582,20 +582,6 @@ class UserViewSet(viewsets.ModelViewSet):
 """,
             PIE786(lineno=6, col_offset=8),
         ),
-    ],
-)
-def test_broad_except(try_statement: str, error: Any) -> None:
-    expr = ast.parse(try_statement)
-    if error is None:
-        assert list(Flake8PieCheck786(expr).run()) == []
-    else:
-        assert list(Flake8PieCheck786(expr).run()) == [error]
-
-
-@pytest.mark.xfail(message="tracking control flow is a pain")
-@pytest.mark.parametrize(
-    "try_statement,error",
-    [
         (
             """
 try:
@@ -618,13 +604,39 @@ for x in my_results:
                 continue
         raise
 """,
-            PIE786(lineno=4, col_offset=20),
+            PIE786(lineno=5, col_offset=24),
         ),
     ],
 )
-def test_broad_except_failing(try_statement: str, error: Any) -> None:
+def test_broad_except(try_statement: str, error: Any) -> None:
     expr = ast.parse(try_statement)
     if error is None:
         assert list(Flake8PieCheck786(expr).run()) == []
     else:
         assert list(Flake8PieCheck786(expr).run()) == [error]
+
+
+EXPRESSIONS = [
+    """
+if x != 123:
+    if y == 10:
+        continue
+raise
+    """,
+    """
+if x != 123:
+    return
+raise
+    """,
+    """
+if x != 123:
+    continue
+raise
+    """,
+]
+
+
+def test_has_bad_control_flow() -> None:
+    for expression in EXPRESSIONS:
+        expr = ast.parse(expression)
+        assert has_bad_control_flow(expr.body) is True

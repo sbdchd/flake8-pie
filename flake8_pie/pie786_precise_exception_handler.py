@@ -20,17 +20,32 @@ BAD_EXCEPT_IDS = {"BaseException", "Exception"}
 def is_bad_except_type(except_type: Optional[ast.Name]) -> bool:
     return except_type is None or except_type.id in BAD_EXCEPT_IDS
 
-def is_bad_except_body(except_body: List[ast.AST]) -> bool:
+
+def has_bad_control_flow(nodes: List[ast.stmt]) -> bool:
+    for node in nodes:
+        if isinstance(node, (ast.Continue, ast.Break, ast.Return)):
+            return True
+        if (
+            hasattr(node, "body")
+            and isinstance(node.body, list)
+            and has_bad_control_flow(node.body)
+        ):
+            return True
+    return False
+
+
+def body_has_raise(except_body: List[ast.stmt]) -> bool:
     for node in except_body:
         if isinstance(node, ast.Raise):
-            return False
-    return True
+            return True
+    return False
+
 
 def is_broad_except(node: ast.ExceptHandler) -> Optional[ErrorLoc]:
     """
     ensure try...except is not called with Exception, BaseException, or no argument
     """
-    if not is_bad_except_body(node.body):
+    if body_has_raise(node.body) and not has_bad_control_flow(node.body):
         return None
     if isinstance(node.type, ast.Tuple):
         for elt in node.type.elts:
