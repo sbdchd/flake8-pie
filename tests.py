@@ -462,6 +462,56 @@ def test_is_celery_dict_task_definition(dict_: str, expected: bool) -> None:
             """
 try:
     print("Hello")
+except:
+    raise
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except Exception:
+    raise
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    print("hello world")
+    raise
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    if x != 123:
+        if y == 10:
+            print("hello")
+    raise
+""",
+            None,
+        ),
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    if x != 123:
+        raise
+""",
+            PIE786(lineno=4, col_offset=20),
+        ),
+        (
+            """
+try:
+    print("Hello")
 except ValueError:
     pass
 """,
@@ -535,6 +585,44 @@ class UserViewSet(viewsets.ModelViewSet):
     ],
 )
 def test_broad_except(try_statement: str, error: Any) -> None:
+    expr = ast.parse(try_statement)
+    if error is None:
+        assert list(Flake8PieCheck786(expr).run()) == []
+    else:
+        assert list(Flake8PieCheck786(expr).run()) == [error]
+
+
+@pytest.mark.xfail(message="tracking control flow is a pain")
+@pytest.mark.parametrize(
+    "try_statement,error",
+    [
+        (
+            """
+try:
+    print("Hello")
+except (ValueError, BaseException):
+    if x != 123:
+        return
+    raise
+""",
+            PIE786(lineno=4, col_offset=20),
+        ),
+        (
+            """
+for x in my_results:
+    try:
+        print("Hello")
+    except (ValueError, BaseException):
+        if x != 123:
+            if y == 10:
+                continue
+        raise
+""",
+            PIE786(lineno=4, col_offset=20),
+        ),
+    ],
+)
+def test_broad_except_failing(try_statement: str, error: Any) -> None:
     expr = ast.parse(try_statement)
     if error is None:
         assert list(Flake8PieCheck786(expr).run()) == []
