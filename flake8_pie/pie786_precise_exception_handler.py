@@ -27,8 +27,8 @@ def has_bad_control_flow(nodes: List[ast.stmt]) -> bool:
             return True
         if (
             hasattr(node, "body")
-            and isinstance(cast(Any,node).body, list)
-            and has_bad_control_flow(cast(Any,node).body)
+            and isinstance(cast(Any, node).body, list)
+            and has_bad_control_flow(cast(Any, node).body)
         ):
             return True
     return False
