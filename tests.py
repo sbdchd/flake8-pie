@@ -8,14 +8,18 @@ from flake8_pie import (
     PIE781,
     PIE783,
     PIE784,
-    PIE786,
     PIE785,
     ErrorLoc,
     is_assign_and_return,
-    Flake8PieCheck,
+    Flake8PieCheck781,
+    Flake8PieCheck783,
+    Flake8PieCheck784,
+    Flake8PieCheck785,
+    Flake8PieCheck786,
     is_invalid_celery_crontab,
     is_celery_dict_task_definition,
 )
+from flake8_pie.pie786_precise_exception_handler import PIE786
 
 
 func_test_cases = [
@@ -114,7 +118,7 @@ def test_is_assign_and_return(
 
     expected_errors = [expected] if expected is not None else []
 
-    assert list(Flake8PieCheck(node).run()) == expected_errors, reason
+    assert list(Flake8PieCheck781(node).run()) == expected_errors, reason
 
 
 def test_checker_matches_flake8_api() -> None:
@@ -122,8 +126,15 @@ def test_checker_matches_flake8_api() -> None:
     flake8 requires checkers have both a name and a version
     see: https://gitlab.com/pycqa/flake8/blob/027ed1c9cc5087b611630aea08dd67a498e701a4/src/flake8/plugins/manager.py#L110
     """
-    assert Flake8PieCheck.version
-    assert Flake8PieCheck.name
+    for checker in (
+        Flake8PieCheck781,
+        Flake8PieCheck783,
+        Flake8PieCheck784,
+        Flake8PieCheck785,
+        Flake8PieCheck786,
+    ):
+        assert checker.version
+        assert checker.name
 
 
 @pytest.mark.parametrize(
@@ -222,7 +233,9 @@ def test_celery_task_name_lint(code: str, expected: Optional[ErrorLoc]) -> None:
     node = ast.parse(code)
     assert isinstance(node, ast.Module)
     expected_errors = [expected] if expected else []
-    assert list(Flake8PieCheck(node).run()) == expected_errors, "missing name property"
+    assert (
+        list(Flake8PieCheck783(node).run()) == expected_errors
+    ), "missing name property"
 
 
 @pytest.mark.parametrize(
@@ -293,7 +306,7 @@ def test_celery_crontab_named_args(code: str, expected: Optional[ErrorLoc]) -> N
     assert isinstance(node, ast.Module)
     expected_errors = [expected] if expected else []
     assert (
-        list(Flake8PieCheck(node).run()) == expected_errors
+        list(Flake8PieCheck784(node).run()) == expected_errors
     ), "missing a required argument"
 
 
@@ -364,7 +377,7 @@ def test_celery_require_task_expiration(
     node = ast.parse(code)
     assert isinstance(node, ast.Module)
     expected_errors = [expected] if expected else []
-    assert list(Flake8PieCheck(node).run()) == expected_errors, "missing expiration"
+    assert list(Flake8PieCheck785(node).run()) == expected_errors, "missing expiration"
 
 
 @pytest.mark.parametrize(
@@ -524,6 +537,6 @@ class UserViewSet(viewsets.ModelViewSet):
 def test_broad_except(try_statement: str, error: Any) -> None:
     expr = ast.parse(try_statement)
     if error is None:
-        assert list(Flake8PieCheck(expr).run()) == []
+        assert list(Flake8PieCheck786(expr).run()) == []
     else:
-        assert list(Flake8PieCheck(expr).run()) == [error]
+        assert list(Flake8PieCheck786(expr).run()) == [error]

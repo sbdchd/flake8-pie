@@ -1,24 +1,12 @@
-from typing import Optional, List, NamedTuple, Iterable
+from typing import Optional, List
 from functools import partial
 import ast
 
-
-class ErrorLoc(NamedTuple):
-    """
-    location of the lint infraction
-    """
-
-    lineno: int
-    col_offset: int
-
-    message: str
-    type: "Flake8PieCheck"
+from flake8_pie.base import ErrorLoc, Flake8PieVisitor, Flake8PieCheck
+from flake8_pie.pie786_precise_exception_handler import Flake8PieCheck786  # noqa: F401
 
 
-class Flake8PieVisitor(ast.NodeVisitor):
-    def __init__(self) -> None:
-        self.errors: List[ErrorLoc] = []
-
+class GeneralFlake8PieVisitor(Flake8PieVisitor):
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         """
         run checker function and track error if found
@@ -49,16 +37,6 @@ class Flake8PieVisitor(ast.NodeVisitor):
             self.errors.append(error)
 
         self.generic_visit(node)
-
-    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
-        error = is_broad_except(node)
-        if error:
-            self.errors.append(error)
-
-        self.generic_visit(node)
-
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}: errors={self.errors}>"
 
 
 def get_assign_target_id(stmt: ast.stmt) -> Optional[str]:
@@ -234,67 +212,42 @@ def is_celery_apply_async_missing_expires(node: ast.Call) -> Optional[ErrorLoc]:
     return None
 
 
-BAD_EXCEPT_IDS = {"BaseException", "Exception"}
+class Flake8PieCheck781(Flake8PieCheck):
+    visitor = GeneralFlake8PieVisitor
 
 
-def is_bad_except_type(except_type: Optional[ast.Name]) -> bool:
-    return except_type is None or except_type.id in BAD_EXCEPT_IDS
+class Flake8PieCheck783(Flake8PieCheck):
+    visitor = GeneralFlake8PieVisitor
 
 
-def is_broad_except(node: ast.ExceptHandler) -> Optional[ErrorLoc]:
-    """
-    ensure try...except is not called with Exception, BaseException, or no argument
-    """
-    if isinstance(node.type, ast.Tuple):
-        for elt in node.type.elts:
-            if (isinstance(elt, ast.Name) or elt is None) and is_bad_except_type(elt):
-                return PIE786(lineno=elt.lineno, col_offset=elt.col_offset)
-        return None
-    if (isinstance(node.type, ast.Name) or node.type is None) and is_bad_except_type(
-        node.type
-    ):
-        return PIE786(lineno=node.lineno, col_offset=node.col_offset)
-    return None
+class Flake8PieCheck784(Flake8PieCheck):
+    visitor = GeneralFlake8PieVisitor
 
 
-class Flake8PieCheck:
-    name = "flake8-pie"
-    version = "0.6.0"
-
-    def __init__(self, tree: ast.Module) -> None:
-        self.tree = tree
-
-    def run(self) -> Iterable[ErrorLoc]:
-        visitor = Flake8PieVisitor()
-
-        visitor.visit(self.tree)
-
-        yield from visitor.errors
+class Flake8PieCheck785(Flake8PieCheck):
+    visitor = GeneralFlake8PieVisitor
 
 
 PIE781 = partial(
     ErrorLoc,
     message="PIE781: You are assigning to a variable and then returning. Instead remove the assignment and return.",
-    type=Flake8PieCheck,
+    type=Flake8PieCheck781,
 )
 
 PIE783 = partial(
     ErrorLoc,
     message="PIE783: Celery tasks should have explicit names.",
-    type=Flake8PieCheck,
+    type=Flake8PieCheck783,
 )
 
 PIE784 = partial(
     ErrorLoc,
     message="PIE784: Celery crontab is missing explicit arguments.",
-    type=Flake8PieCheck,
+    type=Flake8PieCheck784,
 )
 
 PIE785 = partial(
     ErrorLoc,
     message="PIE785: Celery tasks should have expirations.",
-    type=Flake8PieCheck,
-)
-PIE786 = partial(
-    ErrorLoc, message="PIE786: Use precise exception handlers.", type=Flake8PieCheck
+    type=Flake8PieCheck785,
 )
