@@ -606,6 +606,40 @@ for x in my_results:
 """,
             PIE786(lineno=5, col_offset=24),
         ),
+        (
+            """
+for x in my_results:
+    try:
+        print("Hello")
+    except (ValueError, BaseException):
+        if x != 123:
+            break
+        raise
+""",
+            PIE786(lineno=5, col_offset=24),
+        ),
+        (
+            """
+for x in my_results:
+    try:
+        print("Hello")
+    except (ValueError, BaseException):
+        break
+        raise
+""",
+            PIE786(lineno=5, col_offset=24),
+        ),
+        (
+            """
+for x in my_results:
+    try:
+        print("Hello")
+    except (ValueError, BaseException):
+        return
+        raise
+""",
+            PIE786(lineno=5, col_offset=24),
+        ),
     ],
 )
 def test_broad_except(try_statement: str, error: Any) -> None:
