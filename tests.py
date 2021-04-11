@@ -1,6 +1,6 @@
 import ast
-from typing import Optional, Any
 import typing
+from typing import Any, Optional
 
 import pytest
 
@@ -10,17 +10,16 @@ from flake8_pie import (
     PIE784,
     PIE785,
     ErrorLoc,
-    is_assign_and_return,
     Flake8PieCheck781,
     Flake8PieCheck783,
     Flake8PieCheck784,
     Flake8PieCheck785,
     Flake8PieCheck786,
-    is_invalid_celery_crontab,
+    is_assign_and_return,
     is_celery_dict_task_definition,
+    is_invalid_celery_crontab,
 )
 from flake8_pie.pie786_precise_exception_handler import PIE786, has_bad_control_flow
-
 
 func_test_cases = [
     (

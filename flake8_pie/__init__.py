@@ -1,8 +1,8 @@
-from typing import Optional, List
-from functools import partial
 import ast
+from functools import partial
+from typing import List, Optional
 
-from flake8_pie.base import ErrorLoc, Flake8PieVisitor, Flake8PieCheck
+from flake8_pie.base import ErrorLoc, Flake8PieCheck, Flake8PieVisitor
 from flake8_pie.pie786_precise_exception_handler import Flake8PieCheck786  # noqa: F401
 
 
