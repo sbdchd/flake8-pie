@@ -24,7 +24,7 @@ jobs:
       - save_cache:
           paths:
             - ./.mypy_cache
-            - /home/circleci/.cache/pypoetry/
+            - /root/.cache/
           key: v2-dependencies-{{ checksum "poetry.lock" }}
 
       - run:
@@ -56,7 +56,7 @@ jobs:
       - save_cache:
           paths:
             - ./.mypy_cache
-            - /home/circleci/.cache/pypoetry/
+            - /root/.cache/
           key: v2-dependencies-{{ checksum "poetry.lock" }}
 
       - run:
