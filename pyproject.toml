@@ -17,11 +17,10 @@ classifiers=[
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.6"
+python = ">=3.6.1"
 
 [tool.poetry.dev-dependencies]
 black = "^18.3-alpha.0"
-mypy = "^0.650.0"
 flake8 = "^3.6"
 setuptools = "^40.6"
 wheel = "^0.32.3"
@@ -29,6 +28,9 @@ twine = "^1.12"
 pytest-watch = "^4.2"
 pytest = "^4.0"
 ipython = "^7.2"
+mypy = "^0.812.0"
+astpretty = "^2.1"
+isort = "^4.3"
 
 [tool.poetry.plugins]
 [tool.poetry.plugins."flake8.extension"]

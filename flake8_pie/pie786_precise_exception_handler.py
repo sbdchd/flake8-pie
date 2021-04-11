@@ -1,8 +1,8 @@
-from typing import Optional, List, Any, cast
-from functools import partial
 import ast
+from functools import partial
+from typing import Any, List, Optional, cast
 
-from flake8_pie.base import ErrorLoc, Flake8PieVisitor, Flake8PieCheck
+from flake8_pie.base import ErrorLoc, Flake8PieCheck, Flake8PieVisitor
 
 
 class Flake8Pie786Visitor(Flake8PieVisitor):

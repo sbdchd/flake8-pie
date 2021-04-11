@@ -1,6 +1,5 @@
-from typing import NamedTuple, Iterable, List, Type
-
 import ast
+from typing import Iterable, List, NamedTuple, Type
 
 
 class ErrorLoc(NamedTuple):

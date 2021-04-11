@@ -10,7 +10,6 @@ jobs:
       - restore_cache:
           keys:
             - v2-dependencies-{{ checksum "poetry.lock" }}
-            - v2-dependencies-
 
       - run:
           name: install dependencies
@@ -20,22 +19,18 @@ jobs:
             source $BASH_ENV
             # Install with `--user` because we don't own root
             python3 -m pip install --user poetry===0.12.11
-            # Install our dev dependencies
+            poetry config settings.virtualenvs.in-project true
             poetry install
       - save_cache:
           paths:
             - ./.mypy_cache
-            - /home/circleci/.cache/pypoetry/
+            - /root/.cache/
           key: v2-dependencies-{{ checksum "poetry.lock" }}
 
       - run:
           name: run tests
           command: |
-            # NOTE: we have to do some finagling to get python paths to work
-            # see:
-            #   https://github.com/pytest-dev/pytest/issues/2287
-            #   https://stackoverflow.com/a/26544761/3720597
-            PYTHONPATH=. poetry run pytest
+            ./s/test
 
   lint:
     docker:
@@ -47,7 +42,6 @@ jobs:
       - restore_cache:
           keys:
             - v2-dependencies-{{ checksum "poetry.lock" }}
-            - v2-dependencies-
 
       - run:
           name: install dependencies
@@ -57,20 +51,18 @@ jobs:
             source $BASH_ENV
             # Install with `--user` because we don't own root
             python3 -m pip install --user poetry===0.12.11
-            # Install our dev dependencies
+            poetry config settings.virtualenvs.in-project true
             poetry install
       - save_cache:
           paths:
             - ./.mypy_cache
-            - /home/circleci/.cache/pypoetry/
+            - /root/.cache/
           key: v2-dependencies-{{ checksum "poetry.lock" }}
 
       - run:
           name: run lint
           command: |
-            poetry run mypy *.py
-            poetry run black --check .
-            poetry run flake8 .
+            ./s/lint
 
 workflows:
   version: 2
