@@ -19,7 +19,7 @@ jobs:
             source $BASH_ENV
             # Install with `--user` because we don't own root
             python3 -m pip install --user poetry===0.12.11
-            # Install our dev dependencies
+            poetry config settings.virtualenvs.in-project true
             poetry install
       - save_cache:
           paths:
@@ -51,7 +51,7 @@ jobs:
             source $BASH_ENV
             # Install with `--user` because we don't own root
             python3 -m pip install --user poetry===0.12.11
-            # Install our dev dependencies
+            poetry config settings.virtualenvs.in-project true
             poetry install
       - save_cache:
           paths:
@@ -63,7 +63,6 @@ jobs:
           name: run lint
           command: |
             ./s/lint
-
 
 workflows:
   version: 2
