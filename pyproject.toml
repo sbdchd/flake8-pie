@@ -17,11 +17,10 @@ classifiers=[
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.6"
+python = ">=3.6.1"
 
 [tool.poetry.dev-dependencies]
 black = "^18.3-alpha.0"
-mypy = "^0.650.0"
 flake8 = "^3.6"
 setuptools = "^40.6"
 wheel = "^0.32.3"
@@ -29,6 +28,9 @@ twine = "^1.12"
 pytest-watch = "^4.2"
 pytest = "^4.0"
 ipython = "^7.2"
+mypy = "^0.812.0"
+astpretty = "^2.1"
+isort = "^4.3"
 
 [tool.poetry.plugins]
 [tool.poetry.plugins."flake8.extension"]
@@ -37,6 +39,16 @@ PIE783 = "flake8_pie:Flake8PieCheck783"
 PIE784 = "flake8_pie:Flake8PieCheck784"
 PIE785 = "flake8_pie:Flake8PieCheck785"
 PIE786 = "flake8_pie:Flake8PieCheck786"
+PIE787 = "flake8_pie:Flake8PieCheck787"
+PIE788 = "flake8_pie:Flake8PieCheck788"
+PIE789 = "flake8_pie:Flake8PieCheck789"
+PIE790 = "flake8_pie:Flake8PieCheck790"
+PIE791 = "flake8_pie:Flake8PieCheck791"
+PIE792 = "flake8_pie:Flake8PieCheck792"
+PIE793 = "flake8_pie:Flake8PieCheck793"
+PIE794 = "flake8_pie:Flake8PieCheck794"
+PIE795 = "flake8_pie:Flake8PieCheck795"
+PIE796 = "flake8_pie:Flake8PieCheck796"
 
 [build-system]
 requires = ["poetry>=0.12"]

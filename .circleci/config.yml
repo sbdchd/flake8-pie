@@ -10,7 +10,6 @@ jobs:
       - restore_cache:
           keys:
             - v2-dependencies-{{ checksum "poetry.lock" }}
-            - v2-dependencies-
 
       - run:
           name: install dependencies
@@ -31,11 +30,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            # NOTE: we have to do some finagling to get python paths to work
-            # see:
-            #   https://github.com/pytest-dev/pytest/issues/2287
-            #   https://stackoverflow.com/a/26544761/3720597
-            PYTHONPATH=. poetry run pytest
+            ./s/test
 
   lint:
     docker:
@@ -47,7 +42,6 @@ jobs:
       - restore_cache:
           keys:
             - v2-dependencies-{{ checksum "poetry.lock" }}
-            - v2-dependencies-
 
       - run:
           name: install dependencies
@@ -68,9 +62,8 @@ jobs:
       - run:
           name: run lint
           command: |
-            poetry run mypy *.py
-            poetry run black --check .
-            poetry run flake8 .
+            ./s/lint
+
 
 workflows:
   version: 2
