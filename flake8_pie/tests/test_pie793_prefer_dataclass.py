@@ -42,12 +42,20 @@ class Foo:
     ),
     ex(
         code="""
+class Foo:
+    x: list[str]
+    def __init__(self) -> None: ...
+""",
+        errors=[PIE793(lineno=2, col_offset=0)],
+    ),
+    ex(
+        code="""
 class FakeEnum:
     A: int = 1
     B = 2
     C = 3
 """,
-        errors=[PIE793(lineno=2, col_offset=0)],
+        errors=[],
     ),
     ex(
         code="""
@@ -94,6 +102,15 @@ class Foo:
 @dataclass
 class Foo:
     x: list[str]
+""",
+        errors=[],
+    ),
+    ex(
+        code="""
+class Foo:
+    x: list[str]
+    async def create(self) -> Foo:
+        raise NotImplementedError
 """,
         errors=[],
     ),
