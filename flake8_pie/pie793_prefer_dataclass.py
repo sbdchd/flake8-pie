@@ -7,11 +7,9 @@ from typing import Sequence
 from flake8_pie.base import Error
 
 
-def _is_suspicious_assignment_stmt(stmt: ast.stmt) -> bool:
-    return (
-        isinstance(stmt, ast.AnnAssign)
-        and isinstance(stmt.target, ast.Name)
-        and stmt.target.id != "__slots__"
+def _is_dataclass_like_stmt(stmt: ast.stmt) -> bool:
+    return isinstance(stmt, ast.AnnAssign) or (
+        isinstance(stmt, ast.FunctionDef) and stmt.name == "__init__"
     )
 
 
@@ -25,7 +23,7 @@ def pie793_prefer_dataclass(
         not inside_inheriting_cls
         and not node.bases
         and not node.decorator_list
-        and any(_is_suspicious_assignment_stmt(stmt) for stmt in node.body)
+        and all(_is_dataclass_like_stmt(stmt) for stmt in node.body)
     ):
         errors.append(PIE793(lineno=node.lineno, col_offset=node.col_offset))
 
