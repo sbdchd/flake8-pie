@@ -25,7 +25,7 @@ def _get_assign_target_id(stmt: ast.stmt) -> str | None:
     return None
 
 
-def is_assign_and_return(func: ast.FunctionDef) -> Error | None:
+def pie781_assign_and_return(func: ast.FunctionDef, errors: list[Error]) -> None:
     """
     check a FunctionDef for assignment and return where a user assigns to a
     variable and returns that variable instead of just returning
@@ -39,11 +39,9 @@ def is_assign_and_return(func: ast.FunctionDef) -> Error | None:
             assign_stmt = func.body[-2]
             assign_id = _get_assign_target_id(assign_stmt)
             if return_stmt.value.id == assign_id:
-                return PIE781(
-                    lineno=return_stmt.lineno, col_offset=return_stmt.col_offset
+                errors.append(
+                    PIE781(lineno=return_stmt.lineno, col_offset=return_stmt.col_offset)
                 )
-
-    return None
 
 
 PIE781 = partial(

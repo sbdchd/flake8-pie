@@ -12,10 +12,9 @@ def _is_bool_literal(stmt: ast.expr) -> bool:
     )
 
 
-def is_no_unnecessary_if_expr(node: ast.IfExp) -> Error | None:
+def pie797_no_unnecessary_if_expr(node: ast.IfExp, errors: list[Error]) -> None:
     if _is_bool_literal(node.body) and _is_bool_literal(node.orelse):
-        return PIE797(lineno=node.lineno, col_offset=node.col_offset)
-    return None
+        errors.append(PIE797(lineno=node.lineno, col_offset=node.col_offset))
 
 
 PIE797 = partial(

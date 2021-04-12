@@ -6,7 +6,7 @@ import pytest
 
 from flake8_pie import Flake8PieCheck
 from flake8_pie.base import Error
-from flake8_pie.pie781_assign_and_return import PIE781, is_assign_and_return
+from flake8_pie.pie781_assign_and_return import PIE781
 from flake8_pie.tests.utils import to_errors
 
 func_test_cases = [
@@ -92,17 +92,7 @@ def get_foo(id) -> Optional[Foo]:
 
 @pytest.mark.parametrize("func,expected,reason", func_test_cases)
 def test_is_assign_and_return(func: str, expected: Error | None, reason: str) -> None:
-
-    node = ast.parse(func)
-
-    assert isinstance(node, ast.Module)
-
-    func_def = node.body[0]
-    assert isinstance(func_def, ast.FunctionDef)
-    assert is_assign_and_return(func_def) == expected, reason
-
     expected_errors = [expected] if expected is not None else []
-
     assert (
-        to_errors(Flake8PieCheck(node, filename="foo.py").run())
+        to_errors(Flake8PieCheck(ast.parse(func), filename="foo.py").run())
     ) == expected_errors, reason

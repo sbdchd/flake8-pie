@@ -6,11 +6,10 @@ from functools import partial
 from flake8_pie.base import Error
 
 
-def is_no_inherit_object(node: ast.ClassDef) -> Error | None:
+def pie792_no_inherit_object(node: ast.ClassDef, errors: list[Error]) -> None:
     for base in node.bases:
         if isinstance(base, ast.Name) and base.id == "object":
-            return PIE792(lineno=base.lineno, col_offset=base.col_offset)
-    return None
+            errors.append(PIE792(lineno=base.lineno, col_offset=base.col_offset))
 
 
 PIE792 = partial(

@@ -14,7 +14,7 @@ CELERY_SHARED_TASK_NAME = "shared_task"
 CELERY_TASK_NAME = "task"
 
 
-def is_celery_explicit_names(func: ast.FunctionDef) -> Error | None:
+def pie783_celery_explicit_names(func: ast.FunctionDef, errors: list[Error]) -> None:
     """
     check if a Celery task definition is missing an explicit name.
     """
@@ -25,23 +25,22 @@ def is_celery_explicit_names(func: ast.FunctionDef) -> Error | None:
                 and isinstance(dec.value, ast.Name)
                 and dec.attr == CELERY_TASK_NAME
             ):
-                return PIE783(lineno=dec.lineno, col_offset=dec.col_offset)
+                errors.append(PIE783(lineno=dec.lineno, col_offset=dec.col_offset))
             if isinstance(dec, ast.Name) and dec.id == CELERY_SHARED_TASK_NAME:
-                return PIE783(lineno=dec.lineno, col_offset=dec.col_offset)
+                errors.append(PIE783(lineno=dec.lineno, col_offset=dec.col_offset))
             if isinstance(dec, ast.Call):
                 if (
                     isinstance(dec.func, ast.Name)
                     and dec.func.id == CELERY_SHARED_TASK_NAME
                     and not has_name_kwarg(dec)
                 ):
-                    return PIE783(lineno=dec.lineno, col_offset=dec.col_offset)
+                    errors.append(PIE783(lineno=dec.lineno, col_offset=dec.col_offset))
                 if (
                     isinstance(dec.func, ast.Attribute)
                     and dec.func.attr == CELERY_TASK_NAME
                     and not has_name_kwarg(dec)
                 ):
-                    return PIE783(lineno=dec.lineno, col_offset=dec.col_offset)
-    return None
+                    errors.append(PIE783(lineno=dec.lineno, col_offset=dec.col_offset))
 
 
 PIE783 = partial(Error, message="PIE783: Celery tasks should have explicit names.")

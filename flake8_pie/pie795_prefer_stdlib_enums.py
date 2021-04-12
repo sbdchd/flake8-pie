@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import ast
 from functools import partial
+from typing import Sequence
 
 from flake8_pie.base import Error
 
 
-def is_prefer_stdlib_enums(
-    node: ast.ClassDef, inside_inheriting_cls_stack: list[bool]
-) -> Error | None:
+def pie795_prefer_stdlib_enums(
+    node: ast.ClassDef, errors: list[Error], inside_inheriting_cls_stack: Sequence[bool]
+) -> None:
     inside_inheriting_cls = (
         inside_inheriting_cls_stack and inside_inheriting_cls_stack[-1]
     )
@@ -22,8 +23,7 @@ def is_prefer_stdlib_enums(
             for stmt in node.body
         )
     ):
-        return PIE795(lineno=node.lineno, col_offset=node.col_offset)
-    return None
+        errors.append(PIE795(lineno=node.lineno, col_offset=node.col_offset))
 
 
 PIE795 = partial(

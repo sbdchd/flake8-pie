@@ -29,7 +29,7 @@ CELERY_OPTIONS_KEY = "options"
 CELERY_EXPIRES_KEY = "expires"
 
 
-def _is_celery_task_missing_expires(dict_: ast.Dict) -> Error | None:
+def _is_celery_task_missing_expires(dict_: ast.Dict, errors: list[Error]) -> None:
     """
     ensure that celery tasks have an `expires` arg
     """
@@ -42,33 +42,34 @@ def _is_celery_task_missing_expires(dict_: ast.Dict) -> Error | None:
                         if isinstance(k, ast.Str) and k.s == CELERY_EXPIRES_KEY:
                             return None
 
-                    return PIE785(lineno=value.lineno, col_offset=value.col_offset)
-        return PIE785(lineno=dict_.lineno, col_offset=dict_.col_offset)
-
-    return None
+                    errors.append(
+                        PIE785(lineno=value.lineno, col_offset=value.col_offset)
+                    )
+                    return
+        errors.append(PIE785(lineno=dict_.lineno, col_offset=dict_.col_offset))
 
 
 CELERY_APPLY_ASYNC = "apply_async"
 
 
-def _is_celery_apply_async_missing_expires(node: ast.Call) -> Error | None:
+def _is_celery_apply_async_missing_expires(node: ast.Call, errors: list[Error]) -> None:
     """
     ensure foo.apply_async() is given an expiration
     """
     if isinstance(node.func, ast.Attribute) and node.func.attr == CELERY_APPLY_ASYNC:
         for k in node.keywords:
             if k.arg == CELERY_EXPIRES_KEY:
-                return None
-        return PIE785(lineno=node.lineno, col_offset=node.col_offset)
-
-    return None
+                return
+        errors.append(PIE785(lineno=node.lineno, col_offset=node.col_offset))
 
 
-def is_celery_require_tasks_expire(node: ast.Call | ast.Dict) -> Error | None:
+def pie785_celery_require_tasks_expire(
+    node: ast.Call | ast.Dict, errors: list[Error]
+) -> None:
     if isinstance(node, ast.Call):
-        return _is_celery_apply_async_missing_expires(node)
+        _is_celery_apply_async_missing_expires(node, errors)
     else:
-        return _is_celery_task_missing_expires(node)
+        _is_celery_task_missing_expires(node, errors)
 
 
 PIE785 = partial(Error, message="PIE785: Celery tasks should have expirations.")

@@ -6,10 +6,9 @@ from functools import partial
 from flake8_pie.base import Error
 
 
-def is_no_pointless_statements(node: ast.Expr) -> Error | None:
+def pie791_no_pointless_statements(node: ast.Expr, errors: list[Error]) -> None:
     if isinstance(node.value, ast.Compare):
-        return PIE791(lineno=node.lineno, col_offset=node.col_offset)
-    return None
+        errors.append(PIE791(lineno=node.lineno, col_offset=node.col_offset))
 
 
 PIE791 = partial(

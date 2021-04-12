@@ -20,10 +20,9 @@ def _extends_enum(node: ast.ClassDef) -> bool:
     return False
 
 
-def is_prefer_unique_enum(node: ast.ClassDef) -> Error | None:
+def pie786_prefer_unique_enum(node: ast.ClassDef, errors: list[Error]) -> None:
     if _extends_enum(node) and not node.decorator_list:
-        return PIE796(lineno=node.lineno, col_offset=node.col_offset)
-    return None
+        errors.append(PIE796(lineno=node.lineno, col_offset=node.col_offset))
 
 
 PIE796 = partial(
