@@ -15,27 +15,56 @@ PREFER_UNIQUE_ENUM_EXAMPLES = [
 class FakeEnum(enum.Enum):
     A = "A"
     B = "B"
-    C = "C"
+    C = "B"
 """,
-        errors=[PIE796(lineno=2, col_offset=0)],
+        errors=[PIE796(lineno=5, col_offset=4)],
     ),
     ex(
         code="""
 class FakeEnum(Enum):
     A = 1
     B = 2
-    C = 3
+    C = 2
 """,
-        errors=[PIE796(lineno=2, col_offset=0)],
+        errors=[PIE796(lineno=5, col_offset=4)],
     ),
     ex(
         code="""
 class FakeEnum(str, Enum):
+    A = "1"
+    B = "2"
+    C = "2"
+""",
+        errors=[PIE796(lineno=5, col_offset=4)],
+    ),
+    ex(
+        code="""
+class FakeEnum(Enum):
+    A = 1.0
+    B = 2.5
+    C = 2.5
+""",
+        errors=[PIE796(lineno=5, col_offset=4)],
+    ),
+    ex(
+        code="""
+class FakeEnum(Enum):
+    A = 1.0
+    B = True
+    C = False
+    D = False
+""",
+        errors=[PIE796(lineno=4, col_offset=4), PIE796(lineno=6, col_offset=4)],
+    ),
+    ex(
+        code="""
+class FakeEnum(Enum):
     A = 1
     B = 2
-    C = 3
+    C = None
+    D = None
 """,
-        errors=[PIE796(lineno=2, col_offset=0)],
+        errors=[PIE796(lineno=6, col_offset=4)],
     ),
     ex(
         code="""
@@ -53,7 +82,7 @@ class FakeEnum(enum.Enum):
 class FakeEnum(Enum):
     A = 1
     B = 2
-    C = 3
+    C = 2
 """,
         errors=[],
     ),
@@ -63,13 +92,12 @@ class FakeEnum(Enum):
 class FakeEnum(enum.Enum):
     A = "A"
     B = "B"
-    C = "C"
+    C = "B"
 """,
         errors=[],
     ),
     ex(
         code="""
-@foo_decorator
 class FakeEnum(enum.Enum):
     A = "A"
     B = "B"

@@ -22,10 +22,35 @@ def _extends_enum(node: ast.ClassDef) -> bool:
 
 def pie786_prefer_unique_enum(node: ast.ClassDef, errors: list[Error]) -> None:
     if _extends_enum(node) and not node.decorator_list:
-        errors.append(PIE796(lineno=node.lineno, col_offset=node.col_offset))
+        seen: set[str | complex | None | bool] = set()
+        for stmt in node.body:
+            if isinstance(stmt, ast.Assign):
+                if isinstance(stmt.value, ast.Num):
+                    num_val = stmt.value.n
+                    if num_val in seen:
+                        errors.append(
+                            PIE796(lineno=stmt.lineno, col_offset=stmt.col_offset)
+                        )
+                    else:
+                        seen.add(num_val)
+                elif isinstance(stmt.value, ast.Str):
+                    str_val = stmt.value.s
+                    if str_val in seen:
+                        errors.append(
+                            PIE796(lineno=stmt.lineno, col_offset=stmt.col_offset)
+                        )
+                    else:
+                        seen.add(str_val)
+                elif isinstance(stmt.value, ast.NameConstant):
+                    name_val: None | bool = stmt.value.value
+                    if name_val in seen:
+                        errors.append(
+                            PIE796(lineno=stmt.lineno, col_offset=stmt.col_offset)
+                        )
+                    else:
+                        seen.add(name_val)
 
 
 PIE796 = partial(
-    Error,
-    message="PIE796: prefer-unique-enums: Consider using the @enum.unique decorator.",
+    Error, message="PIE796: prefer-unique-enums: Consider using removing dupe values."
 )
