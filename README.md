@@ -297,9 +297,8 @@ class Foo(enum.Enum):
 
 ### PIE796: prefer-unique-enums
 
-By default the stdlib enum allow multiple field names to map to the same
-value, this lint requires using the stdlib's `@enum.unique` decorator to
-ensure enum values are unique.
+By default the stdlib enum allows multiple field names to map to the same
+value, this lint requires each enum value be unique.
 
 ```python
 # error
@@ -307,13 +306,14 @@ class Foo(enum.Enum):
     A = "A"
     B = "B"
     C = "C"
+    D = "C"
 
 # ok
-@enum.unique
 class Foo(enum.Enum):
     A = "A"
     B = "B"
     C = "C"
+    D = "D"
 ```
 
 ### PIE797: no-unecessary-if-expr
