@@ -18,9 +18,8 @@ def _get_target_node(stmt: ast.stmt) -> ast.Name | None:
     return None
 
 
-def is_dupe_class_field_definition(node: ast.ClassDef) -> list[Error]:
+def pie794_dupe_class_field_definition(node: ast.ClassDef, errors: list[Error]) -> None:
     seen_targets: set[str] = set()
-    errors: list[Error] = []
     if node.bases and node.body:
         for stmt in node.body:
             target_node = _get_target_node(stmt)
@@ -32,7 +31,6 @@ def is_dupe_class_field_definition(node: ast.ClassDef) -> list[Error]:
                 )
             else:
                 seen_targets.add(target_node.id)
-    return errors
 
 
 PIE794 = partial(

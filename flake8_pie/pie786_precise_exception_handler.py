@@ -40,7 +40,9 @@ def _body_has_raise(except_body: list[ast.stmt]) -> bool:
     return False
 
 
-def is_precise_exception_handler(node: ast.ExceptHandler) -> Error | None:
+def pie786_precise_exception_handler(
+    node: ast.ExceptHandler, errors: list[Error]
+) -> None:
     """
     ensure try...except is not called with Exception, BaseException, or no argument
     """
@@ -49,13 +51,12 @@ def is_precise_exception_handler(node: ast.ExceptHandler) -> Error | None:
     if isinstance(node.type, ast.Tuple):
         for elt in node.type.elts:
             if (isinstance(elt, ast.Name) or elt is None) and _is_bad_except_type(elt):
-                return PIE786(lineno=elt.lineno, col_offset=elt.col_offset)
-        return None
+                errors.append(PIE786(lineno=elt.lineno, col_offset=elt.col_offset))
+                return
     if (isinstance(node.type, ast.Name) or node.type is None) and _is_bad_except_type(
         node.type
     ):
-        return PIE786(lineno=node.lineno, col_offset=node.col_offset)
-    return None
+        errors.append(PIE786(lineno=node.lineno, col_offset=node.col_offset))
 
 
 PIE786 = partial(Error, message="PIE786: Use precise exception handlers.")
