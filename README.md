@@ -2,7 +2,7 @@
 
 > A flake8 extension that implements misc. lints
 
-Note: flake8-pie requires Python 3.6 or greater
+Note: flake8-pie requires Python 3.7 or greater
 
 ## lints
 
