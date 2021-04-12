@@ -6,11 +6,6 @@ Note: flake8-pie requires Python 3.6 or greater
 
 ## lints
 
-- PIE781: You are assigning to a variable and then returning. Instead remove the assignment and return.
-- PIE783: Celery tasks should have explicit names.
-- PIE784: Celery crontab is missing explicit arguments.
-- PIE785: Celery tasks should have expirations.
-
 ### PIE781: assign-and-return
 
 Based on Clippy's
