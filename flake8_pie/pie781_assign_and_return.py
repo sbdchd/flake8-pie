@@ -46,12 +46,6 @@ def is_assign_and_return(func: ast.FunctionDef) -> Error | None:
     return None
 
 
-class PIE781_2:
-    message: str
-    lineno: int
-    col_offset: int
-
-
 PIE781 = partial(
     Error,
     message="PIE781: You are assigning to a variable and then returning. Instead remove the assignment and return.",
