@@ -4,9 +4,10 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck791
+from flake8_pie import Flake8PieCheck
+from flake8_pie.base import Error
 from flake8_pie.pie791_no_pointless_statements import PIE791
-from flake8_pie.tests.utils import ErrorLoc, ex
+from flake8_pie.tests.utils import ex, to_errors
 
 
 @pytest.mark.parametrize(
@@ -70,6 +71,6 @@ process(data == "foo")
         ),
     ],
 )
-def test_no_pointless_statements(code: str, errors: list[ErrorLoc]) -> None:
+def test_no_pointless_statements(code: str, errors: list[Error]) -> None:
     expr = ast.parse(code)
-    assert list(Flake8PieCheck791(expr, filename="foo.py").run()) == errors
+    assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == errors

@@ -4,9 +4,10 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck793
+from flake8_pie import Flake8PieCheck
+from flake8_pie.base import Error
 from flake8_pie.pie793_prefer_dataclass import PIE793
-from flake8_pie.tests.utils import ErrorLoc, ex
+from flake8_pie.tests.utils import ex, to_errors
 
 PREFER_DATACLASS_EXAMPLES = [
     ex(
@@ -42,16 +43,16 @@ class Foo:
     ex(
         code="""
 class FakeEnum:
-    A = "A"
-    B = "B"
-    C = "C"
+    A: int = 1
+    B = 2
+    C = 3
 """,
-        errors=[],
+        errors=[PIE793(lineno=2, col_offset=0)],
     ),
     ex(
         code="""
 @enum.unique
-class FakeEnum(enum.Enum):
+class FooEnum(enum.Enum):
     A = "A"
     B = "B"
     C = "C"
@@ -155,6 +156,6 @@ class BulkSerializerTaskMixin:
 
 
 @pytest.mark.parametrize("code,errors", PREFER_DATACLASS_EXAMPLES)
-def test_prefer_dataclass(code: str, errors: list[ErrorLoc]) -> None:
+def test_prefer_dataclass(code: str, errors: list[Error]) -> None:
     expr = ast.parse(code)
-    assert list(Flake8PieCheck793(expr, filename="foo.py").run()) == errors
+    assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == errors

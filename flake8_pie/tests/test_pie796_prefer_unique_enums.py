@@ -4,9 +4,10 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck796
+from flake8_pie import Flake8PieCheck
+from flake8_pie.base import Error
 from flake8_pie.pie796_prefer_unique_enums import PIE796
-from flake8_pie.tests.utils import ErrorLoc, ex
+from flake8_pie.tests.utils import ex, to_errors
 
 PREFER_UNIQUE_ENUM_EXAMPLES = [
     ex(
@@ -80,6 +81,6 @@ class FakeEnum(enum.Enum):
 
 
 @pytest.mark.parametrize("code,errors", PREFER_UNIQUE_ENUM_EXAMPLES)
-def test_prefer_unique_enums(code: str, errors: list[ErrorLoc]) -> None:
+def test_prefer_unique_enums(code: str, errors: list[Error]) -> None:
     expr = ast.parse(code)
-    assert list(Flake8PieCheck796(expr, filename="foo.py").run()) == errors
+    assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == errors

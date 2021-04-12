@@ -3,10 +3,10 @@ from __future__ import annotations
 import ast
 from functools import partial
 
-from flake8_pie.base import ErrorLoc, Flake8PieCheck, Flake8PieVisitor
+from flake8_pie.base import Error
 
 
-def get_unnecessary_pass_error(node: ast.ClassDef | ast.FunctionDef) -> ErrorLoc | None:
+def is_no_unnecessary_pass(node: ast.ClassDef | ast.FunctionDef) -> Error | None:
     if (
         len(node.body) > 1
         and isinstance(node.body[0], ast.Expr)
@@ -18,28 +18,4 @@ def get_unnecessary_pass_error(node: ast.ClassDef | ast.FunctionDef) -> ErrorLoc
     return None
 
 
-class Visitor(Flake8PieVisitor):
-    def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        error = get_unnecessary_pass_error(node)
-        if error:
-            self.errors.append(error)
-
-        self.generic_visit(node)
-
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
-        error = get_unnecessary_pass_error(node)
-        if error:
-            self.errors.append(error)
-
-        self.generic_visit(node)
-
-
-class Flake8PieCheck790(Flake8PieCheck):
-    visitor = Visitor
-
-
-PIE790 = partial(
-    ErrorLoc,
-    message="PIE790: no-unnecessary-pass: `pass` can be removed.",
-    type=Flake8PieCheck790,
-)
+PIE790 = partial(Error, message="PIE790: no-unnecessary-pass: `pass` can be removed.")

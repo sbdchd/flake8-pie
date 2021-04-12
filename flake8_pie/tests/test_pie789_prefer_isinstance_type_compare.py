@@ -4,9 +4,9 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck789
+from flake8_pie import Flake8PieCheck
 from flake8_pie.pie789_prefer_isinstance_type_compare import PIE789
-from flake8_pie.tests.utils import ErrorLoc, ex
+from flake8_pie.tests.utils import Error, ex, to_errors
 
 
 @pytest.mark.parametrize(
@@ -35,6 +35,12 @@ if type(foo) is not dict: ...
 if type(foo) == Bar: ...
 """,
             errors=[PIE789(lineno=2, col_offset=3)],
+        ),
+        ex(
+            code="""
+foo = "bar" if type(foo) == Bar else "buzz"
+""",
+            errors=[PIE789(lineno=2, col_offset=15)],
         ),
         ex(
             code="""
@@ -68,6 +74,6 @@ if not isinstance(foo, Bar): ...
         ),
     ],
 )
-def test_prefer_isinstance_type_compare(code: str, errors: list[ErrorLoc]) -> None:
+def test_prefer_isinstance_type_compare(code: str, errors: list[Error]) -> None:
     expr = ast.parse(code)
-    assert list(Flake8PieCheck789(expr, filename="foo.py").run()) == errors
+    assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == errors

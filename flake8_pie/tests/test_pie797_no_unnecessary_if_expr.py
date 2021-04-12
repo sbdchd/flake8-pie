@@ -4,9 +4,9 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck797
+from flake8_pie import Flake8PieCheck
 from flake8_pie.pie797_no_unnecessary_if_expr import PIE797
-from flake8_pie.tests.utils import ErrorLoc, ex
+from flake8_pie.tests.utils import Error, ex, to_errors
 
 NO_UNNECSSARY_IF_EXPR = [
     ex(
@@ -43,6 +43,6 @@ bar(is_valid=bool(buzz()))
 
 
 @pytest.mark.parametrize("code,errors", NO_UNNECSSARY_IF_EXPR)
-def test_no_unnecessary_if_expr(code: str, errors: list[ErrorLoc]) -> None:
+def test_no_unnecessary_if_expr(code: str, errors: list[Error]) -> None:
     expr = ast.parse(code)
-    assert list(Flake8PieCheck797(expr, filename="foo.py").run()) == errors
+    assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == errors

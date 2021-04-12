@@ -4,9 +4,10 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck781
+from flake8_pie import Flake8PieCheck
+from flake8_pie.base import Error
 from flake8_pie.pie781_assign_and_return import PIE781, is_assign_and_return
-from flake8_pie.tests.utils import ErrorLoc
+from flake8_pie.tests.utils import to_errors
 
 func_test_cases = [
     (
@@ -90,9 +91,7 @@ def get_foo(id) -> Optional[Foo]:
 
 
 @pytest.mark.parametrize("func,expected,reason", func_test_cases)
-def test_is_assign_and_return(
-    func: str, expected: ErrorLoc | None, reason: str
-) -> None:
+def test_is_assign_and_return(func: str, expected: Error | None, reason: str) -> None:
 
     node = ast.parse(func)
 
@@ -105,5 +104,5 @@ def test_is_assign_and_return(
     expected_errors = [expected] if expected is not None else []
 
     assert (
-        list(Flake8PieCheck781(node, filename="foo.py").run()) == expected_errors
-    ), reason
+        to_errors(Flake8PieCheck(node, filename="foo.py").run())
+    ) == expected_errors, reason

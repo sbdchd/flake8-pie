@@ -3,7 +3,7 @@ from __future__ import annotations
 import ast
 from functools import partial
 
-from flake8_pie.base import ErrorLoc, Flake8PieCheck, Flake8PieVisitor
+from flake8_pie.base import Error
 
 # from: github.com/celery/celery/blob/0736cff9d908c0519e07babe4de9c399c87cb32b/celery/schedules.py#L403
 CELERY_ARG_MAP = dict(minute=0, hour=1, day_of_week=2, day_of_month=3, month_of_year=4)
@@ -27,7 +27,7 @@ def _is_invalid_celery_crontab(*, kwargs: list[ast.keyword]) -> bool:
     return False
 
 
-def _is_loose_crontab_call(call: ast.Call) -> ErrorLoc | None:
+def is_celery_crontab_args(call: ast.Call) -> Error | None:
     """
     require that a user pass all time increments that are smaller than the
     highest one they specify.
@@ -42,21 +42,4 @@ def _is_loose_crontab_call(call: ast.Call) -> ErrorLoc | None:
     return None
 
 
-class GeneralFlake8PieVisitor(Flake8PieVisitor):
-    def visit_Call(self, node: ast.Call) -> None:
-        error = _is_loose_crontab_call(node)
-        if error:
-            self.errors.append(error)
-
-        self.generic_visit(node)
-
-
-class Flake8PieCheck784(Flake8PieCheck):
-    visitor = GeneralFlake8PieVisitor
-
-
-PIE784 = partial(
-    ErrorLoc,
-    message="PIE784: Celery crontab is missing explicit arguments.",
-    type=Flake8PieCheck784,
-)
+PIE784 = partial(Error, message="PIE784: Celery crontab is missing explicit arguments.")

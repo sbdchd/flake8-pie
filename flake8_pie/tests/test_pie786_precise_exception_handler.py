@@ -4,9 +4,9 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck786
-from flake8_pie.pie786_precise_exception_handler import PIE786, has_bad_control_flow
-from flake8_pie.tests.utils import ErrorLoc
+from flake8_pie import Flake8PieCheck
+from flake8_pie.pie786_precise_exception_handler import PIE786, _has_bad_control_flow
+from flake8_pie.tests.utils import Error, to_errors
 
 
 @pytest.mark.parametrize(
@@ -196,12 +196,12 @@ for x in my_results:
         ),
     ],
 )
-def test_broad_except(try_statement: str, error: ErrorLoc | None) -> None:
+def test_broad_except(try_statement: str, error: Error | None) -> None:
     expr = ast.parse(try_statement)
     if error is None:
-        assert list(Flake8PieCheck786(expr, filename="foo.py").run()) == []
+        assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == []
     else:
-        assert list(Flake8PieCheck786(expr, filename="foo.py").run()) == [error]
+        assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == [error]
 
 
 EXPRESSIONS = [
@@ -227,4 +227,4 @@ raise
 def test_has_bad_control_flow() -> None:
     for expression in EXPRESSIONS:
         expr = ast.parse(expression)
-        assert has_bad_control_flow(expr.body) is True
+        assert _has_bad_control_flow(expr.body) is True

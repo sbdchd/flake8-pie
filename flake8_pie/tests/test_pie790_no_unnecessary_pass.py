@@ -4,9 +4,9 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck790
+from flake8_pie import Flake8PieCheck
 from flake8_pie.pie790_no_unnecessary_pass import PIE790
-from flake8_pie.tests.utils import ErrorLoc, ex
+from flake8_pie.tests.utils import Error, ex, to_errors
 
 
 @pytest.mark.parametrize(
@@ -72,6 +72,6 @@ def foo() -> None:
         ),
     ],
 )
-def test_no_unnecessary_pass(code: str, errors: list[ErrorLoc]) -> None:
+def test_no_unnecessary_pass(code: str, errors: list[Error]) -> None:
     expr = ast.parse(code)
-    assert list(Flake8PieCheck790(expr, filename="foo.py").run()) == errors
+    assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == errors

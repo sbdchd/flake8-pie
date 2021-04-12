@@ -4,9 +4,10 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck794
+from flake8_pie import Flake8PieCheck
+from flake8_pie.base import Error
 from flake8_pie.pie794_dupe_class_field_definitions import PIE794
-from flake8_pie.tests.utils import ErrorLoc, ex
+from flake8_pie.tests.utils import ex, to_errors
 
 NO_DUPE_FIELD_EXAMPLES = [
     ex(
@@ -53,6 +54,6 @@ class User(BaseModel):
 
 
 @pytest.mark.parametrize("code,errors", NO_DUPE_FIELD_EXAMPLES)
-def test_no_dupe_class_fields(code: str, errors: list[ErrorLoc]) -> None:
+def test_no_dupe_class_fields(code: str, errors: list[Error]) -> None:
     expr = ast.parse(code)
-    assert list(Flake8PieCheck794(expr, filename="foo.py").run()) == errors
+    assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == errors
