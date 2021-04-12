@@ -4,9 +4,9 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck783
+from flake8_pie import Flake8PieCheck
 from flake8_pie.pie783_celery_explicit_names import PIE783
-from flake8_pie.tests.utils import ErrorLoc
+from flake8_pie.tests.utils import Error, to_errors
 
 
 @pytest.mark.parametrize(
@@ -101,10 +101,10 @@ def bar():
         ),
     ],
 )
-def test_celery_task_name_lint(code: str, expected: ErrorLoc | None) -> None:
+def test_celery_task_name_lint(code: str, expected: Error | None) -> None:
     node = ast.parse(code)
     assert isinstance(node, ast.Module)
     expected_errors = [expected] if expected else []
     assert (
-        list(Flake8PieCheck783(node, filename="foo.py").run()) == expected_errors
+        to_errors(Flake8PieCheck(node, filename="foo.py").run()) == expected_errors
     ), "missing name property"

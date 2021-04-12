@@ -4,9 +4,10 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck792
+from flake8_pie import Flake8PieCheck
+from flake8_pie.base import Error
 from flake8_pie.pie792_no_inherit_object import PIE792
-from flake8_pie.tests.utils import ErrorLoc, ex
+from flake8_pie.tests.utils import ex, to_errors
 
 
 @pytest.mark.parametrize(
@@ -52,6 +53,6 @@ class Foo:
         ),
     ],
 )
-def test_no_inherit_object(code: str, errors: list[ErrorLoc]) -> None:
+def test_no_inherit_object(code: str, errors: list[Error]) -> None:
     expr = ast.parse(code)
-    assert list(Flake8PieCheck792(expr, filename="foo.py").run()) == errors
+    assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == errors

@@ -4,9 +4,10 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck785
+from flake8_pie import Flake8PieCheck
+from flake8_pie.base import Error
 from flake8_pie.pie785_celery_require_tasks_expire import PIE785
-from flake8_pie.tests.utils import ErrorLoc
+from flake8_pie.tests.utils import to_errors
 
 # TODO(sbdchd):
 # add support for beat tasks configured via hook
@@ -69,10 +70,10 @@ foo.apply_async(
         ),
     ],
 )
-def test_celery_require_task_expiration(code: str, expected: ErrorLoc | None) -> None:
+def test_celery_require_task_expiration(code: str, expected: Error | None) -> None:
     node = ast.parse(code)
     assert isinstance(node, ast.Module)
     expected_errors = [expected] if expected else []
     assert (
-        list(Flake8PieCheck785(node, filename="foo.py").run()) == expected_errors
-    ), "missing expiration"
+        to_errors(Flake8PieCheck(node, filename="foo.py").run())
+    ) == expected_errors, "missing expiration"

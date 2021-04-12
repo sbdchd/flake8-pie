@@ -3,7 +3,7 @@ from __future__ import annotations
 import ast
 from functools import partial
 
-from flake8_pie.base import ErrorLoc, Flake8PieCheck, Flake8PieVisitor
+from flake8_pie.base import Error
 
 
 def _is_celery_dict_task_definition(dict_: ast.Dict) -> bool:
@@ -29,7 +29,7 @@ CELERY_OPTIONS_KEY = "options"
 CELERY_EXPIRES_KEY = "expires"
 
 
-def is_celery_task_missing_expires(dict_: ast.Dict) -> ErrorLoc | None:
+def _is_celery_task_missing_expires(dict_: ast.Dict) -> Error | None:
     """
     ensure that celery tasks have an `expires` arg
     """
@@ -51,7 +51,7 @@ def is_celery_task_missing_expires(dict_: ast.Dict) -> ErrorLoc | None:
 CELERY_APPLY_ASYNC = "apply_async"
 
 
-def is_celery_apply_async_missing_expires(node: ast.Call) -> ErrorLoc | None:
+def _is_celery_apply_async_missing_expires(node: ast.Call) -> Error | None:
     """
     ensure foo.apply_async() is given an expiration
     """
@@ -64,28 +64,11 @@ def is_celery_apply_async_missing_expires(node: ast.Call) -> ErrorLoc | None:
     return None
 
 
-class GeneralFlake8PieVisitor(Flake8PieVisitor):
-    def visit_Call(self, node: ast.Call) -> None:
-        error = is_celery_apply_async_missing_expires(node)
-        if error:
-            self.errors.append(error)
-
-        self.generic_visit(node)
-
-    def visit_Dict(self, node: ast.Dict) -> None:
-        error = is_celery_task_missing_expires(node)
-        if error:
-            self.errors.append(error)
-
-        self.generic_visit(node)
+def is_celery_require_tasks_expire(node: ast.Call | ast.Dict) -> Error | None:
+    if isinstance(node, ast.Call):
+        return _is_celery_apply_async_missing_expires(node)
+    else:
+        return _is_celery_task_missing_expires(node)
 
 
-class Flake8PieCheck785(Flake8PieCheck):
-    visitor = GeneralFlake8PieVisitor
-
-
-PIE785 = partial(
-    ErrorLoc,
-    message="PIE785: Celery tasks should have expirations.",
-    type=Flake8PieCheck785,
-)
+PIE785 = partial(Error, message="PIE785: Celery tasks should have expirations.")

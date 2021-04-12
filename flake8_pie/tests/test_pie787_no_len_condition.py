@@ -4,9 +4,10 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck787
+from flake8_pie import Flake8PieCheck
+from flake8_pie.base import Error
 from flake8_pie.pie787_no_len_condition import PIE787
-from flake8_pie.tests.utils import ErrorLoc, ex
+from flake8_pie.tests.utils import ex, to_errors
 
 
 @pytest.mark.parametrize(
@@ -62,6 +63,6 @@ if not foo: ...
         ),
     ],
 )
-def test_no_len_condition(code: str, errors: list[ErrorLoc]) -> None:
+def test_no_len_condition(code: str, errors: list[Error]) -> None:
     expr = ast.parse(code)
-    assert list(Flake8PieCheck787(expr, filename="foo.py").run()) == errors
+    assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == errors

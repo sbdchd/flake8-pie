@@ -3,22 +3,10 @@ from __future__ import annotations
 import ast
 from functools import partial
 
-from flake8_pie.base import ErrorLoc, Flake8PieCheck, Flake8PieVisitor
+from flake8_pie.base import Error
 
 
-class Vistor(Flake8PieVisitor):
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
-        """
-        run checker function and track error if found
-        """
-        error = is_assign_and_return(node)
-        if error:
-            self.errors.append(error)
-
-        self.generic_visit(node)
-
-
-def get_assign_target_id(stmt: ast.stmt) -> str | None:
+def _get_assign_target_id(stmt: ast.stmt) -> str | None:
     """
     We can have two types of assignments statements:
         - ast.Assign: usual assignment
@@ -37,7 +25,7 @@ def get_assign_target_id(stmt: ast.stmt) -> str | None:
     return None
 
 
-def is_assign_and_return(func: ast.FunctionDef) -> ErrorLoc | None:
+def is_assign_and_return(func: ast.FunctionDef) -> Error | None:
     """
     check a FunctionDef for assignment and return where a user assigns to a
     variable and returns that variable instead of just returning
@@ -49,7 +37,7 @@ def is_assign_and_return(func: ast.FunctionDef) -> ErrorLoc | None:
             return_stmt.value, ast.Name
         ):
             assign_stmt = func.body[-2]
-            assign_id = get_assign_target_id(assign_stmt)
+            assign_id = _get_assign_target_id(assign_stmt)
             if return_stmt.value.id == assign_id:
                 return PIE781(
                     lineno=return_stmt.lineno, col_offset=return_stmt.col_offset
@@ -58,12 +46,7 @@ def is_assign_and_return(func: ast.FunctionDef) -> ErrorLoc | None:
     return None
 
 
-class Flake8PieCheck781(Flake8PieCheck):
-    visitor = Vistor
-
-
 PIE781 = partial(
-    ErrorLoc,
+    Error,
     message="PIE781: You are assigning to a variable and then returning. Instead remove the assignment and return.",
-    type=Flake8PieCheck781,
 )

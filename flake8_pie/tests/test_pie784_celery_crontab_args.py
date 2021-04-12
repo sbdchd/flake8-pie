@@ -4,9 +4,10 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck784
+from flake8_pie import Flake8PieCheck
+from flake8_pie.base import Error
 from flake8_pie.pie784_celery_crontab_args import PIE784, _is_invalid_celery_crontab
-from flake8_pie.tests.utils import ErrorLoc
+from flake8_pie.tests.utils import to_errors
 
 
 @pytest.mark.parametrize(
@@ -62,7 +63,7 @@ crontab(minute="*/5")
         ),
     ],
 )
-def test_celery_crontab_named_args(code: str, expected: ErrorLoc | None) -> None:
+def test_celery_crontab_named_args(code: str, expected: Error | None) -> None:
     """
     ensure we pass a explicit params to celery's crontab
     see: https://github.com/celery/celery/blob/0736cff9d908c0519e07babe4de9c399c87cb32b/celery/schedules.py#L403
@@ -77,8 +78,8 @@ def test_celery_crontab_named_args(code: str, expected: ErrorLoc | None) -> None
     assert isinstance(node, ast.Module)
     expected_errors = [expected] if expected else []
     assert (
-        list(Flake8PieCheck784(node, filename="foo.py").run()) == expected_errors
-    ), "missing a required argument"
+        to_errors(Flake8PieCheck(node, filename="foo.py").run())
+    ) == expected_errors, "missing a required argument"
 
 
 @pytest.mark.parametrize(

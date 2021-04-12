@@ -4,9 +4,10 @@ import ast
 
 import pytest
 
-from flake8_pie import Flake8PieCheck795
+from flake8_pie import Flake8PieCheck
+from flake8_pie.base import Error
 from flake8_pie.pie795_prefer_stdlib_enums import PIE795
-from flake8_pie.tests.utils import ErrorLoc, ex
+from flake8_pie.tests.utils import ex, to_errors
 
 PREFER_STDLIB_ENUM_EXAMPLES = [
     ex(
@@ -26,15 +27,6 @@ class FakeEnum:
     C = 3
 """,
         errors=[PIE795(lineno=2, col_offset=0)],
-    ),
-    ex(
-        code="""
-class FakeEnum:
-    A: int = 1
-    B = 2
-    C = 3
-""",
-        errors=[],
     ),
     ex(
         code="""
@@ -96,6 +88,6 @@ class Foo(Bar):
 
 
 @pytest.mark.parametrize("code,errors", PREFER_STDLIB_ENUM_EXAMPLES)
-def test_prefer_stdlib_enum(code: str, errors: list[ErrorLoc]) -> None:
+def test_prefer_stdlib_enum(code: str, errors: list[Error]) -> None:
     expr = ast.parse(code)
-    assert list(Flake8PieCheck795(expr, filename="foo.py").run()) == errors
+    assert to_errors(Flake8PieCheck(expr, filename="foo.py").run()) == errors
