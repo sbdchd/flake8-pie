@@ -11,7 +11,7 @@ Note: flake8-pie requires Python 3.6 or greater
 - PIE784: Celery crontab is missing explicit arguments.
 - PIE785: Celery tasks should have expirations.
 
-### PIE781: Assign and Return
+### PIE781: assign-and-return
 
 Based on Clippy's
 [`let_and_return`](https://rust-lang.github.io/rust-clippy/master/index.html#let_and_return)
@@ -35,7 +35,7 @@ def foo():
    return x
 ```
 
-### PIE783: Celery tasks should have explicit names.
+### PIE783: celery-explicit-names
 
 Warn about [Celery](https://pypi.org/project/celery/) task definitions that don't have explicit names.
 
@@ -56,7 +56,7 @@ def foo():
     pass
 ```
 
-### PIE784: Celery crontab is missing explicit arguments.
+### PIE784: celery-explicit-crontab-args
 
 The `crontab` class provided by Celery has some default args that are
 suprising to new users. Specifically, `crontab(hour="0,12")` won't run a task
@@ -76,7 +76,7 @@ Also, since this lint is essentially a naive search for calls to a
 `crontab()` function, if you have a function named the same then this will
 cause false positives.
 
-### PIE785: Celery tasks should have expirations.
+### PIE785: celery-require-tasks-expire
 
 Celery tasks can bunch up if they don't have expirations.
 
@@ -85,7 +85,7 @@ in `.apply_async()` calls.
 
 The same caveat applies about how this lint is naive.
 
-### PIE786: Use precise exception handlers
+### PIE786: precise-exception-handlers
 
 Be precise in what exceptions you catch. Bare `except:` handlers, catching `BaseException`, or catching `Exception` can lead to unexpected bugs.
 
@@ -124,6 +124,214 @@ except OSError:
     pass
 ```
 
+### PIE787: no-len-condition
+
+Empty collections are fasley in Python so calling `len()` is unnecessary when
+checking for emptiness in an if statement/expression.
+
+Comparing to explicit scalars is allowed.
+
+```python
+# error
+if len(foo): ...
+if not len(foo): ...
+
+# ok
+if foo: ...
+if not foo: ...
+if len(foo) > 0: ...
+if len(foo) == 0: ...
+```
+
+### PIE788: no-bool-condition
+
+If statements/expressions evalute the truthiness of the their test argument,
+so calling `bool()` is unnecessary.
+
+Comparing to `True`/`False` is allowed.
+
+```python
+# error
+if bool(foo): ...
+if not bool(foo): ...
+
+# ok
+if foo: ...
+if not foo: ...
+if bool(foo) is True: ...
+if bool(foo) is False: ...
+```
+
+### PIE789: prefer-isinstance-type-compare
+
+Using `type()` doesn't take into account subclassess and type checkers won't
+refine the type, use `isinstance` instead.
+
+```python
+# error
+if type(foo) == str: ...
+if type(foo) is str: ...
+if type(foo) in [int, str]: ...
+
+# ok
+if isinstance(foo, str): ...
+if isinstance(foo, (int, str)): ...
+```
+
+### PIE790: no-unnecessary-pass
+
+`pass` is unnecessary when definining a `class` or function with an empty
+body.
+
+```python
+# error
+class BadError(Exception):
+    """
+    some doc comment
+    """
+    pass
+
+def foo() -> None:
+    """
+    some function
+    """
+    pass
+
+# ok
+class BadError(Exception):
+    """
+    some doc comment
+    """
+
+def foo() -> None:
+    """
+    some function
+    """
+```
+
+### PIE791: no-pointless-statements
+
+Comparisions without an assignment or assertion are probably a typo.
+
+```python
+# error
+"foobar" in data
+res.json() == []
+user.is_authenticated() is True
+
+# ok
+assert "foobar" in data
+foo = res.json() == []
+use.is_authenticated()
+```
+
+### PIE792: no-inherit-object
+
+Inheriting from `object` isn't necessary in Python 3.
+
+```python
+# error
+class Foo(object):
+    ...
+
+# ok
+class Foo:
+    ...
+```
+
+### PIE793: prefer-dataclass
+
+Attempts to find cases where the `@dataclass` decorator is unintentionally
+missing.
+
+```python
+# error
+class Foo:
+    z: dict[int, int]
+    def __init__(self) -> None: ...
+
+class Bar:
+    x: list[str]
+
+# ok
+class Bar(Foo):
+    z: dict[int, int]
+
+@dataclass
+class Bar:
+    x: list[str]
+```
+
+### PIE794: dupe-class-field-definitions
+
+Finds duplicate definitions for the same field, which can occur in large ORM
+model definitions.
+
+```python
+# error
+class User(BaseModel):
+    email = fields.EmailField()
+    # ...80 more properties...
+    email = fields.EmailField()
+
+# ok
+class User(BaseModel):
+    email = fields.EmailField()
+    # ...80 more properties...
+```
+
+### PIE795: prefer-stdlib-enums
+
+Instead of defining various constant properties on a class, use the stdlib
+enum which typecheckers support for type refinement.
+
+```python
+# error
+class Foo:
+    A = "A"
+    B = "B"
+    C = "C"
+
+# ok
+import enum
+class Foo(enum.Enum):
+    A = "A"
+    B = "B"
+    C = "C"
+```
+
+### PIE796: prefer-unique-enums
+
+By default the stdlib enum allow multiple field names to map to the same
+value, this lint requires using the stdlib's `@enum.unique` decorator to
+ensure enum values are unique.
+
+```python
+# error
+class Foo(enum.Enum):
+    A = "A"
+    B = "B"
+    C = "C"
+
+# ok
+@enum.unique
+class Foo(enum.Enum):
+    A = "A"
+    B = "B"
+    C = "C"
+```
+
+### PIE797: no-unecessary-if-expr
+
+Call `bool()` directly rather than reimplementing its functionality.
+
+```python
+# error
+foo(is_valid=True if buzz() else False)
+
+# ok
+foo(is_valid=bool(buzz()))
+```
 
 ## dev
 
@@ -131,22 +339,8 @@ except OSError:
 # install dependencies
 poetry install
 
-# install plugin to work with flake8
-poetry run python setup.py install
-
-# test
-poetry run pytest
-# or with watch
-poetry run ptw
-
-# typecheck
-poetry run mypy *.py
-
-# format
-poetry run black .
-
-# lint
-poetry run flake8 .
+s/lint
+s/test
 ```
 
 ## uploading a new version to [PyPi](https://pypi.org)

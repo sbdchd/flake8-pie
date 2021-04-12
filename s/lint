@@ -13,5 +13,5 @@ fi
 
 ./.venv/bin/mypy .
 
-./.venv/bin/flake8 flake8_pie test*
+./.venv/bin/flake8 flake8_pie
 
