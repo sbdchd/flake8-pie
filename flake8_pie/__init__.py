@@ -96,7 +96,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
 class Flake8PieCheck:
     name = "flake8-pie"
-    version = "0.7.0"
+    version = "0.7.1"
 
     def __init__(
         self, tree: ast.Module, filename: str, *args: object, **kwargs: object
