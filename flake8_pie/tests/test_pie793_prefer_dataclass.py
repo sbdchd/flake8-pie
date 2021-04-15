@@ -50,6 +50,13 @@ class Foo:
     ),
     ex(
         code="""
+class Foo:
+    def __init__(self) -> None: ...
+""",
+        errors=[],
+    ),
+    ex(
+        code="""
 class FakeEnum:
     A: int = 1
     B = 2
