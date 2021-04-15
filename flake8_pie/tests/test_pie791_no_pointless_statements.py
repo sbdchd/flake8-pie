@@ -47,6 +47,14 @@ res.json() == []
         ),
         ex(
             code="""
+class Foo:
+    def __init__(self) -> None:
+        super()
+""",
+            errors=[PIE791(lineno=4, col_offset=8)],
+        ),
+        ex(
+            code="""
 is_eql = res.json() == []
 """,
             errors=[],
@@ -66,6 +74,27 @@ data = "foo"
         ex(
             code="""
 process(data == "foo")
+""",
+            errors=[],
+        ),
+        ex(
+            code="""
+class Foo:
+    def __init__(self) -> None:
+        super().__init__()
+""",
+            errors=[],
+        ),
+        ex(
+            code="""
+class SomeView(BaseView):
+    def list(self, request: Request) -> Response:
+        data = (
+            super()
+            .get_queryset()
+            .filter(x__gt=10)
+        )
+        return Response(data)
 """,
             errors=[],
         ),
