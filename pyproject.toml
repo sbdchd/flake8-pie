@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flake8-pie"
-version = "0.7.1"
+version = "0.7.2"
 description = "A flake8 extension that implements misc. lints"
 repository = "https://github.com/sbdchd/flake8-pie"
 authors = ["Steve Dignam <steve@dignam.xyz>"]
