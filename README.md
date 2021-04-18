@@ -314,7 +314,7 @@ class Foo(enum.Enum):
     D = "D"
 ```
 
-### PIE797: no-unecessary-if-expr
+### PIE797: no-unnecessary-if-expr
 
 Call `bool()` directly rather than reimplementing its functionality.
 
@@ -326,7 +326,7 @@ foo(is_valid=True if buzz() else False)
 foo(is_valid=bool(buzz()))
 ```
 
-### PIE798: no-unecessary-class
+### PIE798: no-unnecessary-class
 
 Instead of using class to namespace functions, use a module.
 
@@ -351,7 +351,6 @@ class User(NamedTuple):
 def update_user(user: User) -> None:
     ...
 
-@staticmethod
 def sync_users() -> None:
     ...
 ```
