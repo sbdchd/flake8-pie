@@ -326,6 +326,36 @@ foo(is_valid=True if buzz() else False)
 foo(is_valid=bool(buzz()))
 ```
 
+### PIE798: no-unecessary-class
+
+Instead of using class to namespace functions, use a module.
+
+```python
+# error
+class UserManager:
+    class User(NamedTuple):
+        name: str
+
+    @classmethod
+    def update_user(cls, user: User) -> None:
+        ...
+
+    @staticmethod
+    def sync_users() -> None:
+        ...
+
+# ok
+class User(NamedTuple):
+    name: str
+
+def update_user(user: User) -> None:
+    ...
+
+@staticmethod
+def sync_users() -> None:
+    ...
+```
+
 ## dev
 
 ```shell

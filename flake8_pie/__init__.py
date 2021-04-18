@@ -26,6 +26,7 @@ from flake8_pie.pie794_dupe_class_field_definitions import (
 from flake8_pie.pie795_prefer_stdlib_enums import pie795_prefer_stdlib_enums
 from flake8_pie.pie796_prefer_unique_enums import pie786_prefer_unique_enum
 from flake8_pie.pie797_no_unnecessary_if_expr import pie797_no_unnecessary_if_expr
+from flake8_pie.pie798_no_unnecessary_class import pie798_no_unnecessary_class
 
 
 class Flake8PieVisitor(ast.NodeVisitor):
@@ -48,6 +49,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie793_prefer_dataclass(node, self.errors, self.inside_inheriting_cls_stack)
         pie795_prefer_stdlib_enums(node, self.errors, self.inside_inheriting_cls_stack)
         pie786_prefer_unique_enum(node, self.errors)
+        pie798_no_unnecessary_class(node, self.errors)
 
         is_inheriting_cls = len(node.bases) > 0
         self.inside_inheriting_cls_stack.append(is_inheriting_cls)
