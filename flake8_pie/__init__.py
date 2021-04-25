@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ast
+from dataclasses import dataclass
 from typing import Iterable
 
 from flake8_pie.base import Body, Error, Flake8Error
@@ -29,6 +30,11 @@ from flake8_pie.pie797_no_unnecessary_if_expr import pie797_no_unnecessary_if_ex
 from flake8_pie.pie798_no_unnecessary_class import pie798_no_unnecessary_class
 
 
+@dataclass(frozen=True)
+class BodyNode:
+    body: list[ast.stmt]
+
+
 class Flake8PieVisitor(ast.NodeVisitor):
     def __init__(self, filename: str) -> None:
         self.errors: list[Error] = []
@@ -46,14 +52,17 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
     def visit_For(self, node: ast.For) -> None:
         self._visit_body(node)
+        self._visit_body(BodyNode(node.orelse))
         self.generic_visit(node)
 
     def visit_AsyncFor(self, node: ast.AsyncFor) -> None:
         self._visit_body(node)
+        self._visit_body(BodyNode(node.orelse))
         self.generic_visit(node)
 
     def visit_While(self, node: ast.While) -> None:
         self._visit_body(node)
+        self._visit_body(BodyNode(node.orelse))
         self.generic_visit(node)
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
@@ -97,6 +106,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie789_prefer_isinstance_type_compare(node, self.errors)
         pie788_no_bool_condition(node, self.errors)
         self._visit_body(node)
+        self._visit_body(BodyNode(node.orelse))
         self.generic_visit(node)
 
     def visit_With(self, node: ast.With) -> None:

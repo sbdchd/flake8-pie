@@ -7,7 +7,9 @@ from typing_extensions import Protocol
 
 
 class Body(Protocol):
-    body: list[ast.stmt]
+    @property
+    def body(self) -> list[ast.stmt]:
+        ...
 
 
 class Flake8Error(NamedTuple):

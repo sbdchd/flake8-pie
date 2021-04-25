@@ -21,6 +21,54 @@ class Foo:
             errors=[PIE790(lineno=4, col_offset=4)],
         ),
         ex(
+            code="""
+if foo:
+    '''foo'''
+    pass
+""",
+            errors=[PIE790(lineno=4, col_offset=4)],
+        ),
+        ex(
+            code="""
+if foo:
+    pass
+else:
+    '''bar'''
+    pass
+""",
+            errors=[PIE790(lineno=6, col_offset=4)],
+        ),
+        ex(
+            code="""
+while True:
+    pass
+else:
+    '''bar'''
+    pass
+""",
+            errors=[PIE790(lineno=6, col_offset=4)],
+        ),
+        ex(
+            code="""
+for _ in range(10):
+    pass
+else:
+    '''bar'''
+    pass
+""",
+            errors=[PIE790(lineno=6, col_offset=4)],
+        ),
+        ex(
+            code="""
+async for _ in range(10):
+    pass
+else:
+    '''bar'''
+    pass
+""",
+            errors=[PIE790(lineno=6, col_offset=4)],
+        ),
+        ex(
             code='''
 def foo() -> None:
     """
