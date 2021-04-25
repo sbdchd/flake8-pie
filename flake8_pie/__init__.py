@@ -3,7 +3,7 @@ from __future__ import annotations
 import ast
 from typing import Iterable
 
-from flake8_pie.base import Error, Flake8Error
+from flake8_pie.base import Body, Error, Flake8Error
 from flake8_pie.pie781_assign_and_return import pie781_assign_and_return
 from flake8_pie.pie783_celery_explicit_names import pie783_celery_explicit_names
 from flake8_pie.pie784_celery_crontab_args import pie784_celery_crontab_args
@@ -36,20 +36,35 @@ class Flake8PieVisitor(ast.NodeVisitor):
         self.inside_inheriting_cls_stack: list[bool] = []
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
-        pie781_assign_and_return(node, self.errors)
         pie783_celery_explicit_names(node, self.errors)
-        pie790_no_unnecessary_pass(node, self.errors)
+        self._visit_body(node)
+        self.generic_visit(node)
 
+    def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> None:
+        self._visit_body(node)
+        self.generic_visit(node)
+
+    def visit_For(self, node: ast.For) -> None:
+        self._visit_body(node)
+        self.generic_visit(node)
+
+    def visit_AsyncFor(self, node: ast.AsyncFor) -> None:
+        self._visit_body(node)
+        self.generic_visit(node)
+
+    def visit_While(self, node: ast.While) -> None:
+        self._visit_body(node)
         self.generic_visit(node)
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        pie790_no_unnecessary_pass(node, self.errors)
         pie794_dupe_class_field_definition(node, self.errors)
         pie792_no_inherit_object(node, self.errors)
         pie793_prefer_dataclass(node, self.errors, self.inside_inheriting_cls_stack)
         pie795_prefer_stdlib_enums(node, self.errors, self.inside_inheriting_cls_stack)
         pie786_prefer_unique_enum(node, self.errors)
         pie798_no_unnecessary_class(node, self.errors)
+
+        self._visit_body(node)
 
         is_inheriting_cls = len(node.bases) > 0
         self.inside_inheriting_cls_stack.append(is_inheriting_cls)
@@ -69,7 +84,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
         pie786_precise_exception_handler(node, self.errors)
-
+        self._visit_body(node)
         self.generic_visit(node)
 
     def visit_Expr(self, node: ast.Expr) -> None:
@@ -81,6 +96,19 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie787_no_len_condition(node, self.errors)
         pie789_prefer_isinstance_type_compare(node, self.errors)
         pie788_no_bool_condition(node, self.errors)
+        self._visit_body(node)
+        self.generic_visit(node)
+
+    def visit_With(self, node: ast.With) -> None:
+        self._visit_body(node)
+        self.generic_visit(node)
+
+    def visit_AsyncWith(self, node: ast.AsyncWith) -> None:
+        self._visit_body(node)
+        self.generic_visit(node)
+
+    def visit_Try(self, node: ast.Try) -> None:
+        self._visit_body(node)
 
         self.generic_visit(node)
 
@@ -89,7 +117,14 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie788_no_bool_condition(node, self.errors)
         pie789_prefer_isinstance_type_compare(node, self.errors)
         pie797_no_unnecessary_if_expr(node, self.errors)
+        self.generic_visit(node)
 
+    def _visit_body(self, node: Body) -> None:
+        pie781_assign_and_return(node, self.errors)
+        pie790_no_unnecessary_pass(node, self.errors)
+
+    def visit_Module(self, node: ast.Module) -> None:
+        self._visit_body(node)
         self.generic_visit(node)
 
     def __repr__(self) -> str:

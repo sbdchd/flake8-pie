@@ -32,6 +32,79 @@ def foo() -> None:
             errors=[PIE790(lineno=7, col_offset=4)],
         ),
         ex(
+            code='''
+async def foo():
+    """
+    buzz
+    """
+
+    pass
+''',
+            errors=[PIE790(lineno=7, col_offset=4)],
+        ),
+        ex(
+            code='''
+try:
+    """
+    buzz
+    """
+    pass
+except ValueError:
+    pass
+''',
+            errors=[PIE790(lineno=6, col_offset=4)],
+        ),
+        ex(
+            code="""
+try:
+    bar()
+except ValueError:
+    '''bar'''
+    pass
+""",
+            errors=[PIE790(lineno=6, col_offset=4)],
+        ),
+        ex(
+            code="""
+for _ in range(10):
+    '''buzz'''
+    pass
+""",
+            errors=[PIE790(lineno=4, col_offset=4)],
+        ),
+        ex(
+            code="""
+async for _ in range(10):
+    '''buzz'''
+    pass
+""",
+            errors=[PIE790(lineno=4, col_offset=4)],
+        ),
+        ex(
+            code="""
+while cond:
+    '''buzz'''
+    pass
+""",
+            errors=[PIE790(lineno=4, col_offset=4)],
+        ),
+        ex(
+            code="""
+with bar:
+    '''buzz'''
+    pass
+""",
+            errors=[PIE790(lineno=4, col_offset=4)],
+        ),
+        ex(
+            code="""
+async with bar:
+    '''buzz'''
+    pass
+""",
+            errors=[PIE790(lineno=4, col_offset=4)],
+        ),
+        ex(
             code="""
 class Foo:
     # bar

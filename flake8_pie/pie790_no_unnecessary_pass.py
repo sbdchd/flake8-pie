@@ -3,12 +3,10 @@ from __future__ import annotations
 import ast
 from functools import partial
 
-from flake8_pie.base import Error
+from flake8_pie.base import Body, Error
 
 
-def pie790_no_unnecessary_pass(
-    node: ast.ClassDef | ast.FunctionDef, errors: list[Error]
-) -> None:
+def pie790_no_unnecessary_pass(node: Body, errors: list[Error]) -> None:
     if (
         len(node.body) > 1
         and isinstance(node.body[0], ast.Expr)

@@ -3,7 +3,7 @@ from __future__ import annotations
 import ast
 from functools import partial
 
-from flake8_pie.base import Error
+from flake8_pie.base import Body, Error
 
 
 def _get_assign_target_id(stmt: ast.stmt) -> str | None:
@@ -25,7 +25,7 @@ def _get_assign_target_id(stmt: ast.stmt) -> str | None:
     return None
 
 
-def pie781_assign_and_return(func: ast.FunctionDef, errors: list[Error]) -> None:
+def pie781_assign_and_return(func: Body, errors: list[Error]) -> None:
     """
     check a FunctionDef for assignment and return where a user assigns to a
     variable and returns that variable instead of just returning
