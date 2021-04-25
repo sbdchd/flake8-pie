@@ -1,6 +1,13 @@
 from __future__ import annotations
 
+import ast
 from typing import NamedTuple
+
+from typing_extensions import Protocol
+
+
+class Body(Protocol):
+    body: list[ast.stmt]
 
 
 class Flake8Error(NamedTuple):
