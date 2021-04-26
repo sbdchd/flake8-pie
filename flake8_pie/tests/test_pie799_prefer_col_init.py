@@ -17,32 +17,6 @@ bar.append(foo)
 """,
         errors=[PIE799(lineno=4, col_offset=0)],
     ),
-    #     ex(
-    #         code="""
-    # if some_cond:
-    #     bar = {}
-    #     foo = Foo()
-    #     bar["foo"] = foo
-    # """,
-    #         errors=[PIE799(lineno=2, col_offset=0)],
-    #     ),
-    #     ex(
-    #         code="""
-    # if some_cond:
-    #     bar = dict()
-    #     foo = Foo()
-    #     bar["foo"] = foo
-    # """,
-    #         errors=[PIE799(lineno=2, col_offset=0)],
-    #     ),
-    #     ex(
-    #         code="""
-    # bar = set()
-    # foo = Foo()
-    # bar.add(foo)
-    # """,
-    #         errors=[PIE799(lineno=2, col_offset=0)],
-    #     ),
     ex(
         code="""
 bar = []
