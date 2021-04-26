@@ -28,6 +28,7 @@ from flake8_pie.pie795_prefer_stdlib_enums import pie795_prefer_stdlib_enums
 from flake8_pie.pie796_prefer_unique_enums import pie786_prefer_unique_enum
 from flake8_pie.pie797_no_unnecessary_if_expr import pie797_no_unnecessary_if_expr
 from flake8_pie.pie798_no_unnecessary_class import pie798_no_unnecessary_class
+from flake8_pie.pie799_prefer_col_init import pie799_prefer_col_init
 
 
 @dataclass(frozen=True)
@@ -132,6 +133,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
     def _visit_body(self, node: Body) -> None:
         pie781_assign_and_return(node, self.errors)
         pie790_no_unnecessary_pass(node, self.errors)
+        pie799_prefer_col_init(node, self.errors)
 
     def visit_Module(self, node: ast.Module) -> None:
         self._visit_body(node)

@@ -355,6 +355,29 @@ def sync_users() -> None:
     ...
 ```
 
+### PIE799: prefer-col-init
+
+Check that values are passed in when collections are created rather than
+creating an empty collection and then inserting.
+
+```python
+# error
+bars = []
+bar = bar()
+bars.append(bar)
+
+# ok
+bar = bar()
+bars = [bar]
+
+# error
+s = deque()
+s.append(foo)
+
+# ok
+s = deque([foo])
+```
+
 ## dev
 
 ```shell
