@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import ast
+from collections.abc import Iterable, Iterator
+from itertools import tee, zip_longest
+from typing import TypeVar
 
 
 def is_if_test_func_call(*, node: ast.If | ast.IfExp, func_name: str) -> bool:
@@ -15,3 +18,12 @@ def is_if_test_func_call(*, node: ast.If | ast.IfExp, func_name: str) -> bool:
         and isinstance(node.test.operand.func, ast.Name)
         and node.test.operand.func.id == func_name
     )
+
+
+T = TypeVar("T")
+
+
+def pairwise(iterable: Iterable[T]) -> Iterator[tuple[T, T | None]]:
+    a, b = tee(iterable)
+    next(b, None)
+    return zip_longest(a, b)
