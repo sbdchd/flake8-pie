@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ast
+from flake8_pie.utils import pairwise
 from functools import partial
 
 from flake8_pie.base import Body, Error
@@ -15,7 +16,7 @@ def is_return_bool(stmt: ast.stmt) -> bool:
 
 
 def pie801_prefer_simple_return(node: Body, errors: list[Error]) -> None:
-    for index, stmt in enumerate(node.body):
+    for stmt, next_stmt in pairwise(node.body):
         if isinstance(stmt, ast.If):
             # we only want "If" statements with a single "Return" of a "bool".
             if len(stmt.body) != 1 or not is_return_bool(stmt.body[0]):
@@ -26,11 +27,7 @@ def pie801_prefer_simple_return(node: Body, errors: list[Error]) -> None:
                 continue
 
             # the next statement after the "If" should also return a bool
-            try:
-                next_stmt = node.body[index + 1]
-            except IndexError:
-                continue
-            if is_return_bool(next_stmt):
+            if next_stmt is not None and is_return_bool(next_stmt):
                 errors.append(PIE801(lineno=stmt.lineno, col_offset=stmt.col_offset))
 
 
