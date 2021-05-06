@@ -378,6 +378,18 @@ s.append(foo)
 s = deque([foo])
 ```
 
+### PIE800: no-unnecessary-spread
+
+Check for unnecessary dict unpacking.
+
+```python
+# error
+{**foo, **{"bar": 10}}
+
+# ok
+{**foo, "bar": 10}
+```
+
 ## dev
 
 ```shell
