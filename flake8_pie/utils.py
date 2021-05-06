@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import ast
+from collections.abc import Iterable, Iterator
 from itertools import tee, zip_longest
 from typing import TypeVar
-from collections.abc import Iterator, Iterable
 
 
 def is_if_test_func_call(*, node: ast.If | ast.IfExp, func_name: str) -> bool:
