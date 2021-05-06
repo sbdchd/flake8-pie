@@ -390,6 +390,29 @@ Check for unnecessary dict unpacking.
 {**foo, "bar": 10}
 ```
 
+### PIE801: prefer-simple-return
+
+Return boolean expressions directly instead of returning `True` and `False`.
+
+```python
+# error
+def main():
+    if foo > 5:
+        return True
+    return False
+
+# error
+def main():
+    if foo > 5:
+        return True
+    else:
+        return False
+
+# ok
+def main():
+    return foo > 5
+```
+
 ## dev
 
 ```shell

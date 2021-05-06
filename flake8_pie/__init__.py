@@ -30,6 +30,7 @@ from flake8_pie.pie797_no_unnecessary_if_expr import pie797_no_unnecessary_if_ex
 from flake8_pie.pie798_no_unnecessary_class import pie798_no_unnecessary_class
 from flake8_pie.pie799_prefer_col_init import pie799_prefer_col_init
 from flake8_pie.pie800_no_unnecessary_spread import pie800_no_unnecessary_spread
+from flake8_pie.pie801_prefer_simple_return import pie801_prefer_simple_return
 
 
 @dataclass(frozen=True)
@@ -136,6 +137,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie781_assign_and_return(node, self.errors)
         pie790_no_unnecessary_pass(node, self.errors)
         pie799_prefer_col_init(node, self.errors)
+        pie801_prefer_simple_return(node, self.errors)
 
     def visit_Module(self, node: ast.Module) -> None:
         self._visit_body(node)
