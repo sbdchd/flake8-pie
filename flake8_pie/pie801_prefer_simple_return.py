@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import ast
-from flake8_pie.utils import pairwise
 from functools import partial
 
 from flake8_pie.base import Body, Error
+from flake8_pie.utils import pairwise
 
 
 def is_return_bool(stmt: ast.stmt) -> bool:
