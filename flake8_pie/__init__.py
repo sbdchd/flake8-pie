@@ -29,6 +29,7 @@ from flake8_pie.pie796_prefer_unique_enums import pie786_prefer_unique_enum
 from flake8_pie.pie797_no_unnecessary_if_expr import pie797_no_unnecessary_if_expr
 from flake8_pie.pie798_no_unnecessary_class import pie798_no_unnecessary_class
 from flake8_pie.pie799_prefer_col_init import pie799_prefer_col_init
+from flake8_pie.pie800_no_unnecessary_spread import pie800_no_unnecessary_spread
 
 
 @dataclass(frozen=True)
@@ -89,6 +90,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
     def visit_Dict(self, node: ast.Dict) -> None:
         pie785_celery_require_tasks_expire(node, self.errors)
+        pie800_no_unnecessary_spread(node, self.errors)
 
         self.generic_visit(node)
 
