@@ -413,6 +413,21 @@ def main():
     return foo > 5
 ```
 
+### PIE802: prefer-simple-any-all
+
+Remove unncesesary comprehensions for `any` and `all`
+
+```python
+# error
+any([x.id for x in bar])
+all([x.id for x in bar])
+
+# ok
+all(x.id for x in bar)
+any(x.id for x in bar)
+any({x.id for x in bar})
+```
+
 ## dev
 
 ```shell
