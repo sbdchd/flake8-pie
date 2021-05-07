@@ -31,7 +31,7 @@ from flake8_pie.pie798_no_unnecessary_class import pie798_no_unnecessary_class
 from flake8_pie.pie799_prefer_col_init import pie799_prefer_col_init
 from flake8_pie.pie800_no_unnecessary_spread import pie800_no_unnecessary_spread
 from flake8_pie.pie801_prefer_simple_return import pie801_prefer_simple_return
-from flake8_pie.pie802_prefer_simple_any_all import pie802_prefer_simple_return
+from flake8_pie.pie802_prefer_simple_any_all import pie802_prefer_simple_any_all
 
 
 @dataclass(frozen=True)
@@ -87,7 +87,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
     def visit_Call(self, node: ast.Call) -> None:
         pie784_celery_crontab_args(node, self.errors)
         pie785_celery_require_tasks_expire(node, self.errors)
-        pie802_prefer_simple_return(node, self.errors)
+        pie802_prefer_simple_any_all(node, self.errors)
 
         self.generic_visit(node)
 
