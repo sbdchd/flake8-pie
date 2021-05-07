@@ -31,7 +31,7 @@ logging.log("Login error for {}".format(user))
         code=r"""
 logging.log(logging.DEBUG, "Login error for {}".format(user))
     """,
-        errors=[PIE803(lineno=2, col_offset=12)],
+        errors=[PIE803(lineno=2, col_offset=27)],
     ),
     ex(
         code=r"""
