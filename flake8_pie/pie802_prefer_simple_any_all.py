@@ -27,5 +27,5 @@ def pie802_prefer_simple_return(node: ast.Call, errors: list[Error]) -> None:
 
 
 PIE802 = partial(
-    Error, message="PIE802: prefer-simple-any-all: remove wrappers in any/all."
+    Error, message="PIE802: prefer-simple-any-all: remove unnecessary comprehension."
 )
