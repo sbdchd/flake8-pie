@@ -428,6 +428,30 @@ any(x.id for x in bar)
 any({x.id for x in bar})
 ```
 
+### PIE803: prefer-logging-interpolation
+
+Don't format strings before logging. Let `logging` interpolate arguments.
+
+This allows Sentry to aggregate logs, prevents raising exceptions if interpolation fails, and improves performance if the log level is disabled. See ["PyCQA/pylint#1788"](https://github.com/PyCQA/pylint/issues/1788#issuecomment-461279687).
+
+```python
+# error
+logger.info("Login error for %s" % user)
+logger.info("Login error for %s, %s" % (user_id, name))
+
+# error
+logger.info("Login error for {}".format(user))
+logger.info("Login error for {}, {}".format(user_id, name))
+
+# error
+logger.info(f"Login error for {user}")
+logger.info(f"Login error for {user_id}, {name}")
+
+# ok
+logger.info("Login error for %s", user)
+logger.info("Login error for %s, %s", user_id, name)
+```
+
 ## dev
 
 ```shell
