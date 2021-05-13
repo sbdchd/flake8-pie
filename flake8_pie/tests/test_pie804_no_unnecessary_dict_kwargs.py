@@ -41,6 +41,7 @@ foo(**{"bar foo": True})
 foo(**{"1foo": True})
 foo(**{buzz: True})
 foo(**{"": True})
+foo(**{f"buzz__{bar}": True})
 """,
         errors=[],
     ),
