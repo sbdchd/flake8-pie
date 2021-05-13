@@ -35,6 +35,7 @@ from flake8_pie.pie802_prefer_simple_any_all import pie802_prefer_simple_any_all
 from flake8_pie.pie803_prefer_logging_interpolation import (
     pie803_prefer_logging_interpolation,
 )
+from flake8_pie.pie804_no_unnecessary_dict_kwargs import pie804_no_dict_kwargs
 
 
 @dataclass(frozen=True)
@@ -92,6 +93,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie785_celery_require_tasks_expire(node, self.errors)
         pie802_prefer_simple_any_all(node, self.errors)
         pie803_prefer_logging_interpolation(node, self.errors)
+        pie804_no_dict_kwargs(node, self.errors)
 
         self.generic_visit(node)
 
