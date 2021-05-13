@@ -17,6 +17,12 @@ foo(**{"bar": True})
     ),
     ex(
         code="""
+foo(**{"r2d2": True})
+""",
+        errors=[PIE804(lineno=2, col_offset=6)],
+    ),
+    ex(
+        code="""
 Foo.objects.create(**{"bar": True})
 """,
         errors=[PIE804(lineno=2, col_offset=21)],
