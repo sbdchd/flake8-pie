@@ -415,7 +415,7 @@ def main():
 
 ### PIE802: prefer-simple-any-all
 
-Remove unncesesary comprehensions for `any` and `all`
+Remove unnecessary comprehensions for `any` and `all`
 
 ```python
 # error
@@ -450,6 +450,21 @@ logger.info(f"Login error for {user_id}, {name}")
 # ok
 logger.info("Login error for %s", user)
 logger.info("Login error for %s, %s", user_id, name)
+```
+
+### PIE804: no-unnecessary-dict-kwargs
+
+As long as the keys of the dict are valid Python identifier names, we can safely
+remove the surrounding dict.
+
+```python
+# error
+foo(**{"bar": True})
+
+# ok
+foo(bar=True)
+foo(**buzz)
+foo(**{"bar foo": True})
 ```
 
 ## dev
