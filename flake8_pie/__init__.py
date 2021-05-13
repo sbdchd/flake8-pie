@@ -36,6 +36,7 @@ from flake8_pie.pie803_prefer_logging_interpolation import (
     pie803_prefer_logging_interpolation,
 )
 from flake8_pie.pie804_no_unnecessary_dict_kwargs import pie804_no_dict_kwargs
+from flake8_pie.pie805_prefer_short_condition import pie805_prefer_short_condition
 
 
 @dataclass(frozen=True)
@@ -139,6 +140,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie788_no_bool_condition(node, self.errors)
         pie789_prefer_isinstance_type_compare(node, self.errors)
         pie797_no_unnecessary_if_expr(node, self.errors)
+        pie805_prefer_short_condition(node, self.errors)
         self.generic_visit(node)
 
     def _visit_body(self, node: Body) -> None:
