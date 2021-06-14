@@ -36,6 +36,10 @@ from flake8_pie.pie803_prefer_logging_interpolation import (
     pie803_prefer_logging_interpolation,
 )
 from flake8_pie.pie804_no_unnecessary_dict_kwargs import pie804_no_dict_kwargs
+from flake8_pie.pie805_prefer_simple_iterator import (
+    pie805_prefer_simple_iterator_for,
+    pie805_prefer_simple_iterator_generator,
+)
 
 
 @dataclass(frozen=True)
@@ -61,6 +65,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
     def visit_For(self, node: ast.For) -> None:
         self._visit_body(node)
         self._visit_body(BodyNode(node.orelse))
+        pie805_prefer_simple_iterator_for(node, self.errors)
         self.generic_visit(node)
 
     def visit_AsyncFor(self, node: ast.AsyncFor) -> None:
@@ -113,6 +118,11 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
         self.generic_visit(node)
 
+    def visit_GeneratorExp(self, node: ast.GeneratorExp) -> None:
+        pie805_prefer_simple_iterator_generator(node, self.errors)
+
+        self.generic_visit(node)
+
     def visit_If(self, node: ast.If) -> None:
         pie787_no_len_condition(node, self.errors)
         pie789_prefer_isinstance_type_compare(node, self.errors)
@@ -146,6 +156,11 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie790_no_unnecessary_pass(node, self.errors)
         pie799_prefer_col_init(node, self.errors)
         pie801_prefer_simple_return(node, self.errors)
+
+    def visit_ListComp(self, node: ast.ListComp) -> None:
+        pie805_prefer_simple_iterator_generator(node, self.errors)
+
+        self.generic_visit(node)
 
     def visit_Module(self, node: ast.Module) -> None:
         self._visit_body(node)
