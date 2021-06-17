@@ -25,9 +25,12 @@ def pie804_no_dict_kwargs(node: ast.Call, errors: list[Error]) -> None:
         if (
             kw.arg is None
             and isinstance(kw.value, ast.Dict)
-            and all(
-                isinstance(key, ast.Str) and is_valid_kwarg_name(key.s)
-                for key in kw.value.keys
+            and (
+                all(
+                    isinstance(key, ast.Str) and is_valid_kwarg_name(key.s)
+                    for key in kw.value.keys
+                )
+                or (len(kw.value.keys) == 1 and kw.value.keys[0] is None)
             )
         ):
             errors.append(
