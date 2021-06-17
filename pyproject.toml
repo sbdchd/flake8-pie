@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flake8-pie"
-version = "0.13.0"
+version = "0.14.0"
 description = "A flake8 extension that implements misc. lints"
 repository = "https://github.com/sbdchd/flake8-pie"
 authors = ["Steve Dignam <steve@dignam.xyz>"]
@@ -29,9 +29,10 @@ twine = "^1.12"
 pytest-watch = "^4.2"
 pytest = "^4.0"
 ipython = "^7.2"
-mypy = "^0.812.0"
+mypy = "^0.900"
 astpretty = "^2.1"
 isort = "^4.3"
+typing_extensions = "^3.10.0.0"
 
 [tool.poetry.plugins]
 [tool.poetry.plugins."flake8.extension"]
