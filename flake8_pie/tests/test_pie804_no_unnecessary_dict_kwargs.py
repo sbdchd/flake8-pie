@@ -35,6 +35,13 @@ Foo.objects.create(**{"_id": some_id})
     ),
     ex(
         code="""
+Foo.objects.create(**{**bar})
+""",
+        errors=[PIE804(lineno=2, col_offset=21)],
+    ),
+    ex(
+        code="""
+foo(**{**data, "foo": "buzz"})
 foo(**buzz)
 foo(**{"bar-foo": True})
 foo(**{"bar foo": True})
