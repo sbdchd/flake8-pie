@@ -36,6 +36,7 @@ from flake8_pie.pie803_prefer_logging_interpolation import (
     pie803_prefer_logging_interpolation,
 )
 from flake8_pie.pie804_no_unnecessary_dict_kwargs import pie804_no_dict_kwargs
+from flake8_pie.pie805_prefer_literal import pie805_prefer_literal
 
 
 @dataclass(frozen=True)
@@ -94,6 +95,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie802_prefer_simple_any_all(node, self.errors)
         pie803_prefer_logging_interpolation(node, self.errors)
         pie804_no_dict_kwargs(node, self.errors)
+        pie805_prefer_literal(node, self.errors)
 
         self.generic_visit(node)
 
