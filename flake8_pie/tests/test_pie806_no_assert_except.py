@@ -33,6 +33,11 @@ if len(foo) == bar:
     ...
 
 try:
+    foo()
+except AssertionError:
+    ...
+
+try:
     assert len(foo) == bar
     buzz()
 except AssertionError:
