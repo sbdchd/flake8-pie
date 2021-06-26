@@ -490,6 +490,22 @@ b"foo"
 "😀".encode()
 ```
 
+### PIE805: no-assert-except
+
+Instead of `assert`ing and catching the exception, use an if statement.
+
+```python
+# error
+try:
+    assert "@" in bar
+except AssertionError:
+    ...
+
+# ok
+if "@" in bar:
+    ...
+```
+
 ## uploading a new version to [PyPi](https://pypi.org)
 
 ```shell
