@@ -20,6 +20,7 @@ def pie805_prefer_literal(node: ast.Call, errors: list[Error]) -> None:
                 and node.args[0].s in UTF8_ENCODE_NAMES
             )
         )
+        and node.func.value.s.isascii()
     ):
         literal_str_node = node.func.value
         errors.append(

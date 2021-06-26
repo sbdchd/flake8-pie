@@ -32,6 +32,7 @@ EXAMPLES = [
 b"foo"
 "foo".encode("ascii")
 "foo".encode("bar")
+"😀".encode()
 """,
         errors=[],
     ),

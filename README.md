@@ -487,6 +487,7 @@ Currently only checks for byte string literals.
 
 # ok
 b"foo"
+"😀".encode()
 ```
 
 ## uploading a new version to [PyPi](https://pypi.org)
