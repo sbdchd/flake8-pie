@@ -37,6 +37,7 @@ from flake8_pie.pie803_prefer_logging_interpolation import (
 )
 from flake8_pie.pie804_no_unnecessary_dict_kwargs import pie804_no_dict_kwargs
 from flake8_pie.pie805_prefer_literal import pie805_prefer_literal
+from flake8_pie.pie806_no_assert_except import pie806_no_assert_except
 
 
 @dataclass(frozen=True)
@@ -133,6 +134,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
     def visit_Try(self, node: ast.Try) -> None:
         self._visit_body(node)
+        pie806_no_assert_except(node, self.errors)
 
         self.generic_visit(node)
 
