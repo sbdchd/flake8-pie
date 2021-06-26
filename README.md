@@ -522,6 +522,21 @@ class Foo:
     foo: List[str] = field(default_factory=list)
 ```
 
+### PIE808: prefer-simple-range
+
+We can leave out the first argument to `range` in some cases since the default
+start position is 0.
+
+```python
+# err
+range(0, 10)
+
+# ok
+range(10)
+range(x, 10)
+range(0, 10, x)
+```
+
 ## uploading a new version to [PyPi](https://pypi.org)
 
 ```shell
