@@ -38,6 +38,7 @@ from flake8_pie.pie803_prefer_logging_interpolation import (
 from flake8_pie.pie804_no_unnecessary_dict_kwargs import pie804_no_dict_kwargs
 from flake8_pie.pie805_prefer_literal import pie805_prefer_literal
 from flake8_pie.pie806_no_assert_except import pie806_no_assert_except
+from flake8_pie.pie807_pefer_list_builtin import pie807_prefer_list_builtin
 
 
 @dataclass(frozen=True)
@@ -143,6 +144,10 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie788_no_bool_condition(node, self.errors)
         pie789_prefer_isinstance_type_compare(node, self.errors)
         pie797_no_unnecessary_if_expr(node, self.errors)
+        self.generic_visit(node)
+
+    def visit_Lambda(self, node: ast.Lambda) -> None:
+        pie807_prefer_list_builtin(node, self.errors)
         self.generic_visit(node)
 
     def _visit_body(self, node: Body) -> None:

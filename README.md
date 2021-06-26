@@ -490,7 +490,7 @@ b"foo"
 "😀".encode()
 ```
 
-### PIE805: no-assert-except
+### PIE806: no-assert-except
 
 Instead of `assert`ing and catching the exception, use an if statement.
 
@@ -504,6 +504,22 @@ except AssertionError:
 # ok
 if "@" in bar:
     ...
+```
+
+### PIE807: prefer-list-builtin
+
+`lambda: []` is equivalent to the builtin `list`
+
+```python
+# error
+@dataclass
+class Foo:
+    foo: List[str] = field(default_factory=lambda: [])
+
+# ok
+@dataclass
+class Foo:
+    foo: List[str] = field(default_factory=list)
 ```
 
 ## uploading a new version to [PyPi](https://pypi.org)
