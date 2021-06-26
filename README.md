@@ -477,6 +477,19 @@ s/lint
 s/test
 ```
 
+### PIE805: prefer-literal
+
+Currently only checks for byte string literals.
+
+```python
+# error
+"foo".encode()
+
+# ok
+b"foo"
+"😀".encode()
+```
+
 ## uploading a new version to [PyPi](https://pypi.org)
 
 ```shell
