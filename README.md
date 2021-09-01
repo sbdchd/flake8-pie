@@ -537,7 +537,35 @@ range(x, 10)
 range(0, 10, x)
 ```
 
-## uploading a new version to [PyPi](https://pypi.org)
+### PIE809: django-prefer-bulk
+
+Bulk create multiple objects instead of executing O(N) queries.
+
+```python
+# error
+[Item.objects.create(item) for item in items]
+
+# error
+[Item.objects.create(item) for item in [bar for bar in buzz]]
+
+# error
+(Item.objects.create(item) for item in items)
+
+# ok
+Item.objects.insert(items)
+Item.objects.create(item)
+```
+
+## development
+
+### examining the AST
+You can use `astpretty` to dump the AST of a piece of code.
+
+```shell
+./.venv/bin/astpretty <(pbpaste)
+```
+
+### uploading a new version to [PyPi](https://pypi.org)
 
 ```shell
 # increment `Flake8PieCheck.version` and pyproject.toml `version`
