@@ -40,6 +40,7 @@ from flake8_pie.pie805_prefer_literal import pie805_prefer_literal
 from flake8_pie.pie806_no_assert_except import pie806_no_assert_except
 from flake8_pie.pie807_pefer_list_builtin import pie807_prefer_list_builtin
 from flake8_pie.pie808_prefer_simple_range import pie808_prefer_simple_range
+from flake8_pie.pie809_django_prefer_bulk import pie809_django_prefer_bulk
 
 
 @dataclass(frozen=True)
@@ -56,6 +57,10 @@ class Flake8PieVisitor(ast.NodeVisitor):
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         pie783_celery_explicit_names(node, self.errors)
         self._visit_body(node)
+        self.generic_visit(node)
+
+    def visit_GeneratorExp(self, node: ast.GeneratorExp) -> None:
+        pie809_django_prefer_bulk(node, self.errors)
         self.generic_visit(node)
 
     def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> None:
@@ -152,6 +157,10 @@ class Flake8PieVisitor(ast.NodeVisitor):
         pie807_prefer_list_builtin(node, self.errors)
         self.generic_visit(node)
 
+    def visit_ListComp(self, node: ast.ListComp) -> None:
+        pie809_django_prefer_bulk(node, self.errors)
+        self.generic_visit(node)
+
     def _visit_body(self, node: Body) -> None:
         pie781_assign_and_return(node, self.errors)
         pie790_no_unnecessary_pass(node, self.errors)
@@ -168,7 +177,7 @@ class Flake8PieVisitor(ast.NodeVisitor):
 
 class Flake8PieCheck:
     name = "flake8-pie"
-    version = "0.7.1"
+    version = "0.15.0"
 
     def __init__(
         self, tree: ast.Module, filename: str, *args: object, **kwargs: object
