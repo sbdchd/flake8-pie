@@ -20,5 +20,5 @@ def pie789_prefer_isinstance_type_compare(
 
 PIE789 = partial(
     Error,
-    message="PIE789: prefer-isinstance-type-compare: Use isinstance for comparing types.",
+    message="PIE789 prefer-isinstance-type-compare: Use isinstance for comparing types.",
 )

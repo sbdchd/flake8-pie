@@ -42,5 +42,5 @@ def pie798_no_unnecessary_class(node: ast.ClassDef, errors: list[Error]) -> None
 
 PIE798 = partial(
     Error,
-    message="PIE798: no-unnecessary-class: Consider using a module for namespacing instead.",
+    message="PIE798 no-unnecessary-class: Consider using a module for namespacing instead.",
 )

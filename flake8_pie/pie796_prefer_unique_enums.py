@@ -52,5 +52,5 @@ def pie786_prefer_unique_enum(node: ast.ClassDef, errors: list[Error]) -> None:
 
 
 PIE796 = partial(
-    Error, message="PIE796: prefer-unique-enums: Consider using removing dupe values."
+    Error, message="PIE796 prefer-unique-enums: Consider using removing dupe values."
 )

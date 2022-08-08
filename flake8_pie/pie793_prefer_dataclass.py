@@ -39,5 +39,5 @@ def pie793_prefer_dataclass(
 
 
 PIE793 = partial(
-    Error, message="PIE793: prefer-dataclass: Consider using a @dataclass."
+    Error, message="PIE793 prefer-dataclass: Consider using a @dataclass."
 )

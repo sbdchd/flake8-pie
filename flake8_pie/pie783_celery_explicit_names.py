@@ -43,4 +43,4 @@ def pie783_celery_explicit_names(func: ast.FunctionDef, errors: list[Error]) -> 
                     errors.append(PIE783(lineno=dec.lineno, col_offset=dec.col_offset))
 
 
-PIE783 = partial(Error, message="PIE783: Celery tasks should have explicit names.")
+PIE783 = partial(Error, message="PIE783 Celery tasks should have explicit names.")

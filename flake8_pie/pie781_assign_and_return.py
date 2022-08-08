@@ -46,5 +46,5 @@ def pie781_assign_and_return(func: Body, errors: list[Error]) -> None:
 
 PIE781 = partial(
     Error,
-    message="PIE781: You are assigning to a variable and then returning. Instead remove the assignment and return.",
+    message="PIE781 You are assigning to a variable and then returning. Instead remove the assignment and return.",
 )

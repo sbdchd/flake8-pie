@@ -33,5 +33,5 @@ def pie801_prefer_simple_return(node: Body, errors: list[Error]) -> None:
 
 PIE801 = partial(
     Error,
-    message="PIE801: prefer-simple-return: Return boolean expressions directly instead of returning `True` and `False`.",
+    message="PIE801 prefer-simple-return: Return boolean expressions directly instead of returning `True` and `False`.",
 )

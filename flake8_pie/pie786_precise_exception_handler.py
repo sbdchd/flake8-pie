@@ -59,4 +59,4 @@ def pie786_precise_exception_handler(
         errors.append(PIE786(lineno=node.lineno, col_offset=node.col_offset))
 
 
-PIE786 = partial(Error, message="PIE786: Use precise exception handlers.")
+PIE786 = partial(Error, message="PIE786 Use precise exception handlers.")

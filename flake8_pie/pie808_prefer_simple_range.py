@@ -22,5 +22,5 @@ def err(lineno: int, col_offset: int) -> Error:
     return Error(
         lineno=lineno,
         col_offset=col_offset,
-        message="PIE808: prefer-simple-range: range starts at 0 by default.",
+        message="PIE808 prefer-simple-range: range starts at 0 by default.",
     )

@@ -34,5 +34,5 @@ def PIE805(lineno: int, col_offset: int) -> Error:
     return Error(
         lineno=lineno,
         col_offset=col_offset,
-        message="PIE805: prefer-literal: Prefer the byte string literal rather than calling encode.",
+        message="PIE805 prefer-literal: Prefer the byte string literal rather than calling encode.",
     )

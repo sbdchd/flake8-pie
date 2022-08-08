@@ -22,5 +22,5 @@ def err(lineno: int, col_offset: int) -> Error:
     return Error(
         lineno=lineno,
         col_offset=col_offset,
-        message="PIE809: django-prefer-bulk: bulk create multiple objects.",
+        message="PIE809 django-prefer-bulk: bulk create multiple objects.",
     )
