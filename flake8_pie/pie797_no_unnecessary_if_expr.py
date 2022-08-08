@@ -19,5 +19,5 @@ def pie797_no_unnecessary_if_expr(node: ast.IfExp, errors: list[Error]) -> None:
 
 PIE797 = partial(
     Error,
-    message="PIE797: no-unnecessary-if-expr: Consider using bool() instead of an if expression.",
+    message="PIE797 no-unnecessary-if-expr: Consider using bool() instead of an if expression.",
 )

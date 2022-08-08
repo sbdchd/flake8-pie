@@ -64,5 +64,5 @@ def pie803_prefer_logging_interpolation(node: ast.Call, errors: list[Error]) -> 
 
 PIE803 = partial(
     Error,
-    message=r"PIE803: prefer-logging-interpolation: Use lazy % formatting in logging functions.",
+    message=r"PIE803 prefer-logging-interpolation: Use lazy % formatting in logging functions.",
 )

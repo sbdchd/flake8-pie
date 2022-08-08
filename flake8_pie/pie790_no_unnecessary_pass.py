@@ -18,4 +18,4 @@ def pie790_no_unnecessary_pass(node: Body, errors: list[Error]) -> None:
         )
 
 
-PIE790 = partial(Error, message="PIE790: no-unnecessary-pass: `pass` can be removed.")
+PIE790 = partial(Error, message="PIE790 no-unnecessary-pass: `pass` can be removed.")

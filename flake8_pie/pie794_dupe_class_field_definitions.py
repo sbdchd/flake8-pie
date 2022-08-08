@@ -34,5 +34,5 @@ def pie794_dupe_class_field_definition(node: ast.ClassDef, errors: list[Error]) 
 
 
 PIE794 = partial(
-    Error, message="PIE794: no-dupe-class-field-defs: This field is duplicated."
+    Error, message="PIE794 no-dupe-class-field-defs: This field is duplicated."
 )

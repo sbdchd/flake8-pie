@@ -14,5 +14,5 @@ def pie787_no_len_condition(node: ast.If | ast.IfExp, errors: list[Error]) -> No
 
 PIE787 = partial(
     Error,
-    message="PIE787: no-len-condition: Remove len() call or compare against a scalar.",
+    message="PIE787 no-len-condition: Remove len() call or compare against a scalar.",
 )

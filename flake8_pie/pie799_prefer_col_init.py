@@ -74,5 +74,5 @@ def pie799_prefer_col_init(node: Body, errors: list[Error]) -> None:
 
 PIE799 = partial(
     Error,
-    message="PIE799: prefer-col-init: Consider passing values in when creating the collection.",
+    message="PIE799 prefer-col-init: Consider passing values in when creating the collection.",
 )

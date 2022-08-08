@@ -42,4 +42,4 @@ def pie784_celery_crontab_args(call: ast.Call, errors: list[Error]) -> None:
         errors.append(PIE784(lineno=call.lineno, col_offset=call.col_offset))
 
 
-PIE784 = partial(Error, message="PIE784: Celery crontab is missing explicit arguments.")
+PIE784 = partial(Error, message="PIE784 Celery crontab is missing explicit arguments.")

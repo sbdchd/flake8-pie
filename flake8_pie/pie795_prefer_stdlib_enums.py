@@ -27,6 +27,5 @@ def pie795_prefer_stdlib_enums(
 
 
 PIE795 = partial(
-    Error,
-    message="PIE795: prefer-stdlib-enum: Considering using the builtin enum type.",
+    Error, message="PIE795 prefer-stdlib-enum: Considering using the builtin enum type."
 )

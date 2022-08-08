@@ -38,6 +38,4 @@ def pie793_prefer_dataclass(
         errors.append(PIE793(lineno=node.lineno, col_offset=node.col_offset))
 
 
-PIE793 = partial(
-    Error, message="PIE793: prefer-dataclass: Consider using a @dataclass."
-)
+PIE793 = partial(Error, message="PIE793 prefer-dataclass: Consider using a @dataclass.")

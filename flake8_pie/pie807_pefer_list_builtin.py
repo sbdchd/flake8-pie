@@ -18,5 +18,5 @@ def err(lineno: int, col_offset: int) -> Error:
     return Error(
         lineno=lineno,
         col_offset=col_offset,
-        message="PIE807: prefer-list-builtin: use the builtin list type instead of a lambda.",
+        message="PIE807 prefer-list-builtin: use the builtin list type instead of a lambda.",
     )

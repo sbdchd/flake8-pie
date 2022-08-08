@@ -13,5 +13,5 @@ def pie788_no_bool_condition(node: ast.If | ast.IfExp, errors: list[Error]) -> N
 
 
 PIE788 = partial(
-    Error, message="PIE788: no-bool-condition: Remove unnecessary bool() call."
+    Error, message="PIE788 no-bool-condition: Remove unnecessary bool() call."
 )

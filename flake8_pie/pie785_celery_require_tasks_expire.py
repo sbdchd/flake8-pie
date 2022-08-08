@@ -72,4 +72,4 @@ def pie785_celery_require_tasks_expire(
         _is_celery_task_missing_expires(node, errors)
 
 
-PIE785 = partial(Error, message="PIE785: Celery tasks should have expirations.")
+PIE785 = partial(Error, message="PIE785 Celery tasks should have expirations.")

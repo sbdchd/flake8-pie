@@ -42,5 +42,5 @@ def PIE804(lineno: int, col_offset: int) -> Error:
     return Error(
         lineno=lineno,
         col_offset=col_offset,
-        message="PIE804: no-unnecessary-dict-kwargs: Remove the dict and pass the kwargs directly.",
+        message="PIE804 no-unnecessary-dict-kwargs: Remove the dict and pass the kwargs directly.",
     )

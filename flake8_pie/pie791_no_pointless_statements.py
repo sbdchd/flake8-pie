@@ -16,5 +16,5 @@ def pie791_no_pointless_statements(node: ast.Expr, errors: list[Error]) -> None:
 
 
 PIE791 = partial(
-    Error, message="PIE791: no-pointless-statements: Statement looks unnecessary."
+    Error, message="PIE791 no-pointless-statements: Statement looks unnecessary."
 )

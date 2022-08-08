@@ -14,5 +14,5 @@ def pie792_no_inherit_object(node: ast.ClassDef, errors: list[Error]) -> None:
 
 PIE792 = partial(
     Error,
-    message="PIE792: no-inherit-object: Inheriting from object is unnecssary in python3.",
+    message="PIE792 no-inherit-object: Inheriting from object is unnecssary in python3.",
 )

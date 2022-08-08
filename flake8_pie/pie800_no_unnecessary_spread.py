@@ -15,5 +15,5 @@ def PIE800(lineno: int, col_offset: int) -> Error:
     return Error(
         lineno=lineno,
         col_offset=col_offset,
-        message="PIE800: no-unnecessary-spread: Consider inlining the dict values.",
+        message="PIE800 no-unnecessary-spread: Consider inlining the dict values.",
     )
