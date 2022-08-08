@@ -29,9 +29,9 @@ twine = "^1.12"
 pytest-watch = "^4.2"
 pytest = "^4.0"
 ipython = "^7.2"
-mypy = "^0.812.0"
 astpretty = "^2.1"
 isort = "^4.3"
+mypy = "^0.971"
 
 [tool.poetry.plugins]
 [tool.poetry.plugins."flake8.extension"]
