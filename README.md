@@ -52,7 +52,7 @@ def foo():
 ### PIE784: celery-explicit-crontab-args
 
 The `crontab` class provided by Celery has some default args that are
-suprising to new users. Specifically, `crontab(hour="0,12")` won't run a task
+surprising to new users. Specifically, `crontab(hour="0,12")` won't run a task
 at midnight and noon, it will run the task at every minute during those two
 hours. This lint makes that call an error, forcing you to write
 `crontab(hour="0, 12", minute="*")`.
@@ -138,7 +138,7 @@ if len(foo) == 0: ...
 
 ### PIE788: no-bool-condition
 
-If statements/expressions evalute the truthiness of the their test argument,
+If statements/expressions evaluate the truthiness of the their test argument,
 so calling `bool()` is unnecessary.
 
 Comparing to `True`/`False` is allowed.
@@ -173,7 +173,7 @@ if isinstance(foo, (int, str)): ...
 
 ### PIE790: no-unnecessary-pass
 
-`pass` is unnecessary when definining a `class` or function with an empty
+`pass` is unnecessary when defining a `class` or function with an empty
 body.
 
 ```python
@@ -204,7 +204,7 @@ def foo() -> None:
 
 ### PIE791: no-pointless-statements
 
-Comparisions without an assignment or assertion are probably a typo.
+Comparisons without an assignment or assertion are probably a typo.
 
 ```python
 # error
