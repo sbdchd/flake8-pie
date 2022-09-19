@@ -12,7 +12,7 @@ def _is_possible_instance_method(func: ast.FunctionDef | ast.AsyncFunctionDef) -
     if func.args.args and func.args.args[0].arg == "self":
         return True
 
-    return func.decorator_list and any(
+    return len(func.decorator_list) > 0 and any(
         not isinstance(dec, ast.Name) or dec.id not in ALLOW_DECORATORS
         for dec in func.decorator_list
     )
