@@ -556,6 +556,32 @@ Item.objects.insert(items)
 Item.objects.create(item)
 ```
 
+### PIE810: single-starts-ends-with
+
+Instead of calling `startswith` or `endswith` on the same string for multiple
+prefixes, pass the prefixes as a tuple in a single `startswith` or `endswith`
+call.
+
+```python
+# error
+foo.startswith("foo") or foo.startswith("bar")
+
+# error
+foo.endswith("foo") or foo.endswith("bar")
+
+# error
+foo.startswith("foo") or str.startswith(foo, "bar")
+
+# ok
+foo.startswith(("foo",  "bar"))
+
+# ok
+foo.endswith(("foo",  "bar"))
+
+# ok
+foo.startswith("foo") or foo.endswith("bar")
+```
+
 ## development
 
 ### examining the AST
