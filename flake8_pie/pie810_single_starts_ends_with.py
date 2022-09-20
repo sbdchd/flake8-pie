@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ast
+from collections import defaultdict
 from functools import partial
 from typing import Any, Type
 
@@ -15,7 +16,7 @@ def pie810_single_starts_ends_with(node: ast.BoolOp, errors: list[Error]) -> Non
         return
 
     for method in ("startswith", "endswith"):
-        seen: dict[Type[ast.AST], Any] = {}
+        seen: dict[Type[ast.AST], Any] = defaultdict(set)
         for val_node in node.values:
             if (
                 isinstance(val_node, ast.Call)
@@ -36,7 +37,6 @@ def pie810_single_starts_ends_with(node: ast.BoolOp, errors: list[Error]) -> Non
 
                 t = type(arg)
                 val = arg.value if isinstance(arg, ast.Constant) else arg.id
-                seen.setdefault(t, set())
                 if val in seen[t]:
                     errors.append(
                         PIE810(lineno=node.lineno, col_offset=node.col_offset)
