@@ -41,6 +41,7 @@ from flake8_pie.pie806_no_assert_except import pie806_no_assert_except
 from flake8_pie.pie807_pefer_list_builtin import pie807_prefer_list_builtin
 from flake8_pie.pie808_prefer_simple_range import pie808_prefer_simple_range
 from flake8_pie.pie809_django_prefer_bulk import pie809_django_prefer_bulk
+from flake8_pie.pie810_single_starts_ends_with import pie810_single_starts_ends_with
 
 
 @dataclass(frozen=True)
@@ -170,6 +171,9 @@ class Flake8PieVisitor(ast.NodeVisitor):
     def visit_Module(self, node: ast.Module) -> None:
         self._visit_body(node)
         self.generic_visit(node)
+
+    def visit_BoolOp(self, node: ast.BoolOp) -> None:
+        pie810_single_starts_ends_with(node, self.errors)
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}: errors={self.errors}>"

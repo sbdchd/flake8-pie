@@ -12,13 +12,10 @@ def _is_possible_instance_method(func: ast.FunctionDef | ast.AsyncFunctionDef) -
     if func.args.args and func.args.args[0].arg == "self":
         return True
 
-    if func.decorator_list and any(
+    return len(func.decorator_list) > 0 and any(
         not isinstance(dec, ast.Name) or dec.id not in ALLOW_DECORATORS
         for dec in func.decorator_list
-    ):
-        return True
-
-    return False
+    )
 
 
 def pie798_no_unnecessary_class(node: ast.ClassDef, errors: list[Error]) -> None:
