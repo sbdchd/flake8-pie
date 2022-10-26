@@ -119,7 +119,7 @@ except OSError:
 
 ### PIE787: no-len-condition
 
-Empty collections are fasley in Python so calling `len()` is unnecessary when
+Empty collections are falsey in Python so calling `len()` is unnecessary when
 checking for emptiness in an if statement/expression.
 
 Comparing to explicit scalars is allowed.
