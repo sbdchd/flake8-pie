@@ -2,6 +2,9 @@
 
 > A flake8 extension that implements misc. lints
 
+
+# **DEPRECATED**: See Ruff's [`flake8-pie` implementation instead](https://github.com/charliermarsh/ruff/blob/06e426f509b6d718d77895dc7bdeaa4df5efae6e/docs/faq.md)
+
 ## lints
 
 ### PIE781: assign-and-return
