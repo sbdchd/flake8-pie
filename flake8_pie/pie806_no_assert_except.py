@@ -19,5 +19,5 @@ def PIE806(lineno: int, col_offset: int) -> Error:
     return Error(
         lineno=lineno,
         col_offset=col_offset,
-        message="PIE806 no-assert-except: Instead of asserting and catching, use an if statment.",
+        message="PIE806 no-assert-except: Instead of asserting and catching, use an if statement.",
     )
